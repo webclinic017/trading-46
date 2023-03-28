@@ -1,0 +1,3 @@
+date,stock_id,Trading_Volume,Trading_money,open,max,min,close,spread,Trading_turnover
+2023-03-27,6861,1399729,175077720,120.0,129.0,120.0,128.0,0.0,1340
+2023-03-28,6861,697203,87493024,125.0,128.5,123.5,125.0,-3.0,661

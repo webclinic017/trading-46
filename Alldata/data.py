@@ -3213,21 +3213,21 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"汽車 工業",
+         "industry_category":"汽車工業",
          "stock_id":"1512",
          "stock_name":"瑞利",
          "type":"twse",
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電機機 械",
+         "industry_category":"電機機械",
          "stock_id":"1513",
          "stock_name":"中興電",
          "type":"twse",
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電機機 械",
+         "industry_category":"電機機械",
          "stock_id":"1514",
          "stock_name":"亞力",
          "type":"twse",
