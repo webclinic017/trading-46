@@ -12,7 +12,7 @@
 # plt.xlabel("日期")
 # plt.ylabel("股價")
 # plt.show()
-from data import data
+from Alldata.data import AllStockdata
 import backtrader as bt
 import yfinance as yf
 import math
@@ -177,6 +177,8 @@ class MaCrossStrategy(bt.Strategy):
         self.trade_count = 1
 
     def next(self):
+        if  self.data.close[0] < self.ma25[0]:
+            self.sell_size = self.getposition().size * self.params.sell_pct
         if not self.position:
             if self.FTcrossover > 0:
                 self.buy_size = (self.broker.cash * self.params.buy_pct) / self.datas[0].close[0]
@@ -186,8 +188,6 @@ class MaCrossStrategy(bt.Strategy):
                 # print('第幾次交易', self.trade_count)
                 # print('----------------------------------------')
                 self.trade_count += 1
-        if  self.data.close[0] < self.ma25[0]:
-            self.sell_size = self.getposition().size * self.params.sell_pct
         elif self.ma1 < self.ma25:
             self.sell_size = self.getposition().size * self.params.sell_pct
         elif self.FTcrossover < 0 or self.TTWcrossover < 0:
@@ -295,13 +295,15 @@ positve_list = []
 positve_list_name_and_value = []
 negatve_list = []
 negatve_list_name_and_value = []
-for index, company in enumerate(data):
+for index, company in enumerate(AllStockdata):
     
     cerebro = bt.Cerebro()
 
 # 獲取 2330 台積電的股價數據
     try:
-        data = bt.feeds.PandasData(dataname=yf.download(company[0], start="2022-01-01", end="2023-03-24"))
+        # data = bt.feeds.PandasData(dataname=yf.download(company['stock_id']+'.TW', start="2022-01-01", end="2023-03-24"))
+
+        data = bt.feeds.PandasData(dataname=yf.download(company['stock_id']+'.TW', start="2022-01-01", end="2023-03-24"))
         cerebro.adddata(data)
         cerebro.addstrategy(MaCrossStrategy)
         cerebro.addsizer(bt.sizers.PercentSizer, percents = 80)
@@ -309,23 +311,23 @@ for index, company in enumerate(data):
         cerebro.broker.setcash(1000.0)
         cerebro.broker.setcommission(commission=0.001425)
         cerebro.run()
-        print('第 %d 個公司' % (index+1))
-        print('公司名稱: %s' % company[1], '股票代碼: %s' % company[0])
+        print('number %d company' % (index+1))
+        print('company name: %s' % company["stock_name"], 'id: %s' % company['stock_id']+'.TW')
         print('Final Portfolio Value: %.2f' % cerebro.broker.getvalue())
         avg_returen.append(cerebro.broker.getvalue())
         if cerebro.broker.getvalue() > 1000:
             positve_list.append(cerebro.broker.getvalue())
-            positve_list_name_and_value.append([company[0],company[1], cerebro.broker.getvalue()])
+            positve_list_name_and_value.append([company['stock_id']+'.TW',company["stock_name"], cerebro.broker.getvalue()])
         else:
             negatve_list.append(cerebro.broker.getvalue())
-            negatve_list_name_and_value.append([company[0],company[1], cerebro.broker.getvalue()])
+            negatve_list_name_and_value.append([company['stock_id']+'.TW',company["stock_name"], cerebro.broker.getvalue()])
          
             # cerebro.plot(numfigs=1)
-            # .subtitle('股票名稱: {}, 股票代號: {}'.format(company[1], company[0]), fontsize=20)
+            # .subtitle('股票名稱: {}, 股票代號: {}'.format(company["stock_name"], company['stock_id']+'.TW'), fontsize=20)
         print('------------------------------------')
     except:
         print('第 %d 個公司' % (index+1))
-        print('公司名稱: %s' % company[1], '股票代碼: %s' % company[0])
+        print('公司名稱: %s' % company["stock_name"], '股票代碼: %s' % company['stock_id']+'.TW')
         print('沒有資料')
         print('------------------------------------')
         pass
@@ -344,7 +346,7 @@ print('正報酬率公司列表與其報酬率由大到小排序')
 positive_sorted_list = sorted(positve_list_name_and_value, key=lambda x: x[2])
 
 for company in positive_sorted_list:
-    print('公司名稱: %s' % company[1], '股票代碼: %s' % company[0])
+    print('公司名稱: %s' % company["stock_name"], '股票代碼: %s' % company['stock_id']+'.TW')
     return_rate = (company[2] - 1000) / 1000
     print('報酬率: %.2f' % return_rate)
     print('------------------------------------')
@@ -355,7 +357,7 @@ print('負報酬率公司列表與其報酬率由大到小排序')
 negative_sorted_list = sorted(negatve_list_name_and_value, key=lambda x: x[2])
 
 for company in negative_sorted_list:
-    print('公司名稱: %s' % company[1], '股票代碼: %s' % company[0])
+    print('公司名稱: %s' % company["stock_name"], '股票代碼: %s' % company['stock_id']+'.TW'+'.TW')
     return_rate = (company[2] - 1000) / 1000
     print('報酬率: %.2f' % return_rate)
     print('------------------------------------')
