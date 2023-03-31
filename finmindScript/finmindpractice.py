@@ -4,7 +4,7 @@ from FinMind.data import DataLoader
 dl = DataLoader()
 # 下載台股股價資料
 stock_data = dl.taiwan_stock_daily(
-    stock_id='2609', start_date='2018-01-01', end_date='2021-06-26'
+    stock_id='2609', start_date='2018-01-01', end_date='2023-03-31'
 )
 # 下載三大法人資料
 stock_data = dl.feature.add_kline_institutional_investors(

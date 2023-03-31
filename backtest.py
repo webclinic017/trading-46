@@ -14,13 +14,13 @@
 # plt.show()
 # from Alldata.data import AllStockdata
 import backtrader as bt
-import yfinance as yf
+import yfinancepractice as yf
 import math
 import pandas as pd
 import time
 import requests, json
 import datetime
-
+from data import AllStockdata
 class MyStrategy(bt.Strategy):
 
     def __init__(self):
@@ -457,3 +457,7 @@ def multiStock():
     #     return_rate = (company[2] - 1000) / 1000
     #     print('報酬率: %.2f' % return_rate)
     #     print('------------------------------------')
+
+
+if __name__ == '__main__':
+    multiStock()
