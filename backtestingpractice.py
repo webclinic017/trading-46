@@ -4,9 +4,11 @@ import yfinance as yf
 from backtesting.test import SMA, GOOG
 import pandas as pd
 import datetime
-import requests, json
+import requests
+import json
 from talib import abstract
 from data import AllStockdata
+
 
 class SmaCross(Strategy):
     def init(self):
@@ -20,26 +22,31 @@ class SmaCross(Strategy):
         elif crossover(self.ma2, self.ma1):
             self.sell()
 
+
 class KdCross(Strategy):
     def init(self):
         super().init()
-        
+
     def next(self):
-        if crossover(20, self.data.slowk): ## K<20 買進
+        if crossover(20, self.data.slowk):  # K<20 買進
             self.buy()
-        elif crossover(self.data.slowk, 80): ## K>80 平倉
+        elif crossover(self.data.slowk, 80):  # K>80 平倉
             self.position.close()
 # data = bt.feeds.PandasData(dataname=yf.download('2303.TW', start="2022-01-01", end="2023-03-24"))
 # bt = Backtest(yf.download('2303.TW', start="2022-01-01", end="2023-03-24"), SmaCross, commission=.002,
 #               exclusive_orders=True)
 # data = pd.read_csv('2330_data.csv',index_col=1, parse_dates=True)
-def data_backtesting(stock_symbol):
+
+
+def data_backtesting_with_kd(stock_symbol):
     pd_data = pd.read_csv(
-        'Alldata/{}_change.csv'.format(stock_symbol), index_col=0,parse_dates=True)
+        'Alldata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
 
-    pd_data2 = pd_data.rename(columns={'High':'high','Low':'low','Close':'close'})
+    pd_data2 = pd_data.rename(
+        columns={'High': 'high', 'Low': 'low', 'Close': 'close'})
 
-    pd_kd = abstract.STOCH(pd_data2, fastk_period=9, slowk_period=3, slowk_matype=0, slowd_period=3, slowd_matype=0)
+    pd_kd = abstract.STOCH(pd_data2, fastk_period=9, slowk_period=3,
+                           slowk_matype=0, slowd_period=3, slowd_matype=0)
 
     pd_data_with_kd = pd.merge(pd_data, pd_kd, on='Date')
     # high = df['最高價']
@@ -61,11 +68,13 @@ def data_backtesting(stock_symbol):
     #     'Alldata/1336_change.csv', index_col=0, parse_dates=True)
 
     bt = Backtest(data, KdCross, commission=.000145, cash=100000,
-                exclusive_orders=True)
+                  exclusive_orders=True)
     stats = bt.run()
     # bt.plot()
     # print((stats))
     return stats
+
+
 def live_data_backtesting():
     stock_list_tse = ['0050']
     stock_list_otc = []
@@ -73,14 +82,16 @@ def live_data_backtesting():
     # otc開頭為上櫃股票。
     # 如果是興櫃股票則無法取得。
     # 組合API需要的股票清單字串
-    stock_list1 = '|'.join('tse_{}.tw'.format(stock) for stock in stock_list_tse) 
+    stock_list1 = '|'.join('tse_{}.tw'.format(stock)
+                           for stock in stock_list_tse)
 
     # 6字頭的股票參數不一樣
-    stock_list2 = '|'.join('otc_{}.tw'.format(stock) for stock in stock_list_otc) 
+    stock_list2 = '|'.join('otc_{}.tw'.format(stock)
+                           for stock in stock_list_otc)
     stock_list = stock_list1 + '|' + stock_list2
     print(stock_list)
 
-    #　組合完整的URL
+    # 　組合完整的URL
     query_url = f'http://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch={stock_list}'
 
     # 呼叫股票資訊API
@@ -97,20 +108,21 @@ def live_data_backtesting():
     data = json.loads(response.text)
     print(data)
     # 過濾出有用到的欄位
-    columns = ['c','n','z','tv','v','o','h','l','y', 'tlong']
+    columns = ['c', 'n', 'z', 'tv', 'v', 'o', 'h', 'l', 'y', 'tlong']
     df = pd.DataFrame(data['msgArray'], columns=columns)
-    df.columns = ['股票代號','公司簡稱','成交價','成交量','累積成交量','開盤價','最高價','最低價','昨收價', '資料更新時間']
+    df.columns = ['股票代號', '公司簡稱', '成交價', '成交量',
+                  '累積成交量', '開盤價', '最高價', '最低價', '昨收價', '資料更新時間']
     today_str = datetime.datetime.today().strftime('%Y-%m-%d')
     today_datetime = datetime.datetime.strptime(today_str, '%Y-%m-%d')
     pd_data = pd.read_csv(
-        'Alldata/{}_change.csv'.format('0050'), index_col=0,parse_dates=True)
+        'Alldata/{}_change.csv'.format('0050'), index_col=0, parse_dates=True)
     print(datetime.datetime.today().strftime('%Y-%m-%d'))
-    open = float(df.at[0,'開盤價'])
-    high = float(df.at[0,'最高價'])
-    low = float(df.at[0,'最低價'])
-    close = float(df.at[0,'成交價'])
-    Adj_Close = float(df.at[0,'昨收價'])
-    volume = float(df.at[0,'累積成交量'])
+    open = float(df.at[0, '開盤價'])
+    high = float(df.at[0, '最高價'])
+    low = float(df.at[0, '最低價'])
+    close = float(df.at[0, '成交價'])
+    Adj_Close = float(df.at[0, '昨收價'])
+    volume = float(df.at[0, '累積成交量'])
 
     # high = df['最高價']
     # low = df['最低價']
@@ -123,7 +135,7 @@ def live_data_backtesting():
     desired_date_str = '2021-03-24'
     desired_date = datetime.datetime.strptime(desired_date_str, '%Y-%m-%d')
 
-    pd_data.loc[today_datetime] = [open, high, low, close,Adj_Close ,volume]
+    pd_data.loc[today_datetime] = [open, high, low, close, Adj_Close, volume]
     print(pd_data, 'pd_data')
     data = pd_data.loc[desired_date:today_str]
 
@@ -131,7 +143,7 @@ def live_data_backtesting():
     #     'Alldata/1336_change.csv', index_col=0, parse_dates=True)
 
     bt = Backtest(data, SmaCross, commission=.000145, cash=100000,
-                exclusive_orders=True)
+                  exclusive_orders=True)
     stats = bt.run()
     bt.plot()
     print(stats)
@@ -141,10 +153,11 @@ def backtesting():
     data = pd.read_csv(
         'Alldata/6747_change.csv', index_col=0, parse_dates=True)
     bt = Backtest(data, SmaCross, commission=.000145, cash=100000,
-                exclusive_orders=True)
+                  exclusive_orders=True)
     stats = bt.run()
     bt.plot()
     print(stats)
+
 
 if __name__ == '__main__':
     average_return_list = []
@@ -152,21 +165,22 @@ if __name__ == '__main__':
         if i['industry_category'] == '電子工業':
             try:
                 print(i["stock_id"], i["stock_name"])
-                print(data_backtesting(i["stock_id"])['Return [%]'])
-                average_return_list.append(data_backtesting(i["stock_id"])['Return [%]'])
+                print(data_backtesting_with_kd(i["stock_id"])['Return [%]'])
+                average_return_list.append(
+                    data_backtesting_with_kd(i["stock_id"])['Return [%]'])
             except Exception as e:
                 print('error in ', i["stock_id"], i["stock_name"])
                 print(e)
 
     print('total number', len(average_return_list))
-    print("average totol return",sum(average_return_list)/len(average_return_list))
+    print("average totol return", sum(
+        average_return_list)/len(average_return_list))
     # while True:
     #     try:
     #         live_data_backtesting()
     #         time.sleep(random.randint(7, 12))
 
-
     #     except Exception as e:
     #         print(e)
     #         time.sleep(random.randint(7, 12))
-        # backtesting()
+    # backtesting()
