@@ -9,38 +9,40 @@ import json
 from talib import abstract
 from data import AllStockdata
 from strategies import SmaCross, KdCross, RSI, MACD, BBANDS, CustomStrategy
-import math,time, multiprocessing
+import math
+import time
+import multiprocessing
+
 
 def data_backtesting_with_CSI(stock_symbol, strategy, plot, start_date="2022-01-01", end_date=None, cash=1000000, commission=0.001425):
     pd_data = pd.read_csv(
         'Alldata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
 
-    #將資料轉換成talib可以使用的格式
+    # 將資料轉換成talib可以使用的格式
     pd_data2 = pd_data.rename(
         columns={'High': 'high', 'Low': 'low', 'Close': 'close'})
-    #加入各種指標，包括KD、MACD、RSI、BBANDS
+    # 加入各種指標，包括KD、MACD、RSI、BBANDS
     pd_kd = abstract.STOCH(pd_data2, fastk_period=9, slowk_period=3,
                            slowk_matype=0, slowd_period=3, slowd_matype=0)
-    pd_MACD = abstract.MACD(pd_data2, fastperiod=12, slowperiod=26,signalperiod=9)
+    pd_MACD = abstract.MACD(pd_data2, fastperiod=12,
+                            slowperiod=26, signalperiod=9)
     pd_RSI = abstract.RSI(pd_data2, 14)
     pd_RSI.name = 'RSI'
-    pd_bbands = abstract.BBANDS(pd_data2, timeperiod=5, nbdevup=float(2), nbdevdn=float(2), matype=0)
-    #將資料合併至 pd_data_with_kd
+    pd_bbands = abstract.BBANDS(
+        pd_data2, timeperiod=5, nbdevup=float(2), nbdevdn=float(2), matype=0)
+    # 將資料合併至 pd_data_with_kd
     pd_data_with_kd = pd.merge(pd_data, pd_kd, on='Date')
     pd_data_with_kd = pd.merge(pd_data_with_kd, pd_MACD, on='Date')
     pd_data_with_kd = pd.merge(pd_data_with_kd, pd_RSI, on='Date')
     pd_data_with_kd = pd.merge(pd_data_with_kd, pd_bbands, on='Date')
 
-
-    #定義要回測的資料範圍，預設為從2022-01-01到今天
+    # 定義要回測的資料範圍，預設為從2022-01-01到今天
     desired_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
-
 
     if end_date == None:
         end_date = datetime.datetime.today().strftime('%Y-%m-%d')
     else:
         end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d')
-
 
     data = pd_data_with_kd.loc[desired_date:end_date]
 
@@ -134,46 +136,47 @@ def live_data_backtesting(stock_symbol):
     print(stats)
 
 
-
 def multipreocess_backtesting(stock_symbol, strategy, plot, start_date, end_date, cash, commission):
     try:
-        data = data_backtesting_with_CSI(stock_symbol, strategy, plot, start_date, end_date, cash, commission)
-        return stock_symbol,data
+        data = data_backtesting_with_CSI(
+            stock_symbol, strategy, plot, start_date, end_date, cash, commission)
+        return stock_symbol, data
     except Exception as e:
         print("error in ", stock_symbol)
         return None
 
+
 if __name__ == '__main__':
     # 回測單一股票
-    print(data_backtesting_with_CSI('0050', strategy=RSI, plot=False, start_date='2021-03-01', cash=100000, commission=.000145))
-    
+    print(data_backtesting_with_CSI('0050', strategy=RSI, plot=False,
+          start_date='2021-03-01', cash=100000, commission=.000145))
+
     # 分產業群回測並計算平均報酬率 可於 data.py 中查看產業群名稱
     # 此未進行多線程加速
-    average_return_list = []
-    profit_factor = []
-    start_time = time.time()
-    for i in AllStockdata:
-        if i['industry_category'] == '電子工業':
-            try:
-                print(i["stock_id"], i["stock_name"])
-                data = data_backtesting_with_CSI(i["stock_id"], strategy=CustomStrategy, plot=False, start_date='2022-01-01', cash=100000, commission=.000145)
-                print(data['Profit Factor'])
-                average_return_list.append(
-                    data['Return [%]'])
-                profit_factor.append(
-                    data['Profit Factor'])
-            except Exception as e:
-                print('error in ', i["stock_id"], i["stock_name"])
-                print(e)
-    profit_factor = [x for x in profit_factor if str(x) != 'nan' or math.isnan(x) == False]
-    print('total number', len(average_return_list))
-    print("average totol return", sum(
-        average_return_list)/len(average_return_list))
-    print("average profit factor", sum(
-        profit_factor)/len(profit_factor))
-    end_time = time.time()
-    print('time elapsed', end_time - start_time)
-
+    # average_return_list = []
+    # profit_factor = []
+    # start_time = time.time()
+    # for i in AllStockdata:
+    #     if i['industry_category'] == '電子工業':
+    #         try:
+    #             print(i["stock_id"], i["stock_name"])
+    #             data = data_backtesting_with_CSI(i["stock_id"], strategy=CustomStrategy, plot=False, start_date='2022-01-01', cash=100000, commission=.000145)
+    #             print(data['Profit Factor'])
+    #             average_return_list.append(
+    #                 data['Return [%]'])
+    #             profit_factor.append(
+    #                 data['Profit Factor'])
+    #         except Exception as e:
+    #             print('error in ', i["stock_id"], i["stock_name"])
+    #             print(e)
+    # profit_factor = [x for x in profit_factor if str(x) != 'nan' or math.isnan(x) == False]
+    # print('total number', len(average_return_list))
+    # print("average totol return", sum(
+    #     average_return_list)/len(average_return_list))
+    # print("average profit factor", sum(
+    #     profit_factor)/len(profit_factor))
+    # end_time = time.time()
+    # print('time elapsed', end_time - start_time)
 
     # 使用 multiprocessing 進行多股票回測
     # 使用該方法速度會提升約五倍, 實測台股約 2400檔股票, 回測時間約為 35秒, 尚未進行優化前約為 157秒
@@ -183,13 +186,19 @@ if __name__ == '__main__':
     start_time = time.time()
     stock_list = []
     for i in AllStockdata:
-        # if i['industry_category'] == '電子工業':
-            try:
-                print(i["stock_id"], i["stock_name"])
-                stock_list.append((i["stock_id"], CustomStrategy, False, '2021-03-01',None, 100000, .000145))
-            except Exception as e:
-                print('error in ', i["stock_id"], i["stock_name"])
-                print(e)
+        try:
+            # 如果最新一筆的資料股價大於 40元, 則不加入回測清單
+            pd_data = pd.read_csv(
+                'Alldata/{}_change.csv'.format(i["stock_id"]), index_col=0, parse_dates=True)
+            if pd_data.iloc[-1]['Close'] < 40:
+                # if i['industry_category'] == '電子工業':
+                print(i["stock_id"], i["stock_name"],'價格', pd_data.iloc[-1]['Close'])
+                stock_list.append(
+                    (i["stock_id"], RSI, False, '2022-01-01', None, 100000, .000145))
+        except Exception as e:
+            print('error in ', i["stock_id"], i["stock_name"])
+            print(e)
+        
 
     cpus = multiprocessing.cpu_count()
     pool = multiprocessing.Pool(processes=cpus)
@@ -205,13 +214,14 @@ if __name__ == '__main__':
             average_return_list.append(i[1]['Return [%]'])
             profit_factor.append(i[1]['Profit Factor'])
 
-    profit_factor = [x for x in profit_factor if str(x) != 'nan' or math.isnan(x) == False]
+    profit_factor = [x for x in profit_factor if str(
+        x) != 'nan' or math.isnan(x) == False]
     print('total number', len(profit_factor))
     print("average totol return", sum(
         average_return_list)/len(average_return_list))
     print("average profit factor", sum(
         profit_factor)/len(profit_factor))
-    
+
     end_time = time.time()
     print('time elapsed', end_time - start_time)
 

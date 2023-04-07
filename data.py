@@ -2099,13 +2099,13 @@ AllStockdata =[
          "type":"twse",
          "date":"2023-03-27"
       },
-      {
-         "industry_category":"ETN",
-         "stock_id":"020005",
-         "stock_name":"永豐外資50N",
-         "type":"twse",
-         "date":"2023-03-27"
-      },
+      # {
+      #    "industry_category":"ETN",
+      #    "stock_id":"020005",
+      #    "stock_name":"永豐外資50N",
+      #    "type":"twse",
+      #    "date":"2023-03-27"
+      # },
       {
          "industry_category":"ETN",
          "stock_id":"020006",
@@ -5026,7 +5026,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電 子工業",
+         "industry_category":"電子工業",
          "stock_id":"2315",
          "stock_name":"神達",
          "type":"twse",
@@ -5075,7 +5075,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":" 電子工業",
+         "industry_category":"電子工業",
          "stock_id":"2321",
          "stock_name":"東訊",
          "type":"twse",
@@ -5089,7 +5089,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子工 業",
+         "industry_category":"電子工業",
          "stock_id":"2323",
          "stock_name":"中環",
          "type":"twse",
@@ -5887,7 +5887,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子工 業",
+         "industry_category":"電子工業",
          "stock_id":"2395",
          "stock_name":"研華",
          "type":"twse",
@@ -5908,7 +5908,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子工 業",
+         "industry_category":"電子工業",
          "stock_id":"2396",
          "stock_name":"精碟",
          "type":"twse",
@@ -5929,7 +5929,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子工 業",
+         "industry_category":"電子工業",
          "stock_id":"2399",
          "stock_name":"映泰",
          "type":"twse",
@@ -5950,14 +5950,14 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子 工業",
+         "industry_category":"電子工業",
          "stock_id":"2401",
          "stock_name":"凌陽",
          "type":"twse",
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子工 業",
+         "industry_category":"電子工業",
          "stock_id":"2402",
          "stock_name":"毅嘉",
          "type":"twse",
@@ -5971,7 +5971,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子工 業",
+         "industry_category":"電子工業",
          "stock_id":"2403",
          "stock_name":"友尚",
          "type":"twse",
@@ -6559,14 +6559,14 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電 子工業",
+         "industry_category":"電子工業",
          "stock_id":"2451",
          "stock_name":"創見",
          "type":"twse",
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子 工業",
+         "industry_category":"電子工業",
          "stock_id":"2452",
          "stock_name":"乾坤",
          "type":"twse",
@@ -6587,7 +6587,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子 工業",
+         "industry_category":"電子工業",
          "stock_id":"2453",
          "stock_name":"凌群",
          "type":"twse",
@@ -6601,7 +6601,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子工 業",
+         "industry_category":"電子工業",
          "stock_id":"2454",
          "stock_name":"聯發科",
          "type":"twse",
@@ -6615,7 +6615,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子工 業",
+         "industry_category":"電子工業",
          "stock_id":"2455",
          "stock_name":"全新",
          "type":"twse",
@@ -6636,7 +6636,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子工 業",
+         "industry_category":"電子工業",
          "stock_id":"2457",
          "stock_name":"飛宏",
          "type":"twse",
@@ -8456,14 +8456,14 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":" 電子工業",
+         "industry_category":"電子工業",
          "stock_id":"3009",
          "stock_name":"奇美電",
          "type":"twse",
          "date":"2023-03-27"
       },
       {
-         "industry_category":" 電子工業",
+         "industry_category":"電子工業",
          "stock_id":"3010",
          "stock_name":"華立",
          "type":"twse",
@@ -8477,7 +8477,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電 子工業",
+         "industry_category":"電子工業",
          "stock_id":"3011",
          "stock_name":"今皓",
          "type":"twse",
@@ -8491,7 +8491,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電 子工業",
+         "industry_category":"電子工業",
          "stock_id":"3013",
          "stock_name":"晟銘電",
          "type":"twse",
@@ -8519,7 +8519,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":" 電子工業",
+         "industry_category":"電子工業",
          "stock_id":"3015",
          "stock_name":"全漢",
          "type":"twse",
@@ -8540,14 +8540,14 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電 子工業",
+         "industry_category":"電子工業",
          "stock_id":"3016",
          "stock_name":"嘉晶",
          "type":"twse",
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子 工業",
+         "industry_category":"電子工業",
          "stock_id":"3017",
          "stock_name":"奇鋐",
          "type":"twse",
@@ -8568,7 +8568,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":" 電子工業",
+         "industry_category":"電子工業",
          "stock_id":"3018",
          "stock_name":"同開",
          "type":"twse",
@@ -8582,7 +8582,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子工 業",
+         "industry_category":"電子工業",
          "stock_id":"3019",
          "stock_name":"亞光",
          "type":"twse",
@@ -8631,7 +8631,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子 工業",
+         "industry_category":"電子工業",
          "stock_id":"3023",
          "stock_name":"信邦",
          "type":"twse",
@@ -9121,14 +9121,14 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電 子工業",
+         "industry_category":"電子工業",
          "stock_id":"3059",
          "stock_name":"華晶科",
          "type":"twse",
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電 子工業",
+         "industry_category":"電子工業",
          "stock_id":"3060",
          "stock_name":"銘異",
          "type":"twse",
@@ -9163,7 +9163,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子工 業",
+         "industry_category":"電子工業",
          "stock_id":"3062",
          "stock_name":"建漢",
          "type":"twse",
@@ -10234,7 +10234,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子 工業",
+         "industry_category":"電子工業",
          "stock_id":"3383",
          "stock_name":"新世紀",
          "type":"twse",
@@ -10269,7 +10269,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電 子工業",
+         "industry_category":"電子工業",
          "stock_id":"3406",
          "stock_name":"玉晶光",
          "type":"twse",
@@ -10283,14 +10283,14 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子 工業",
+         "industry_category":"電子工業",
          "stock_id":"3413",
          "stock_name":"京鼎",
          "type":"twse",
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子工 業",
+         "industry_category":"電子工業",
          "stock_id":"3416",
          "stock_name":"融程電",
          "type":"twse",
@@ -10332,7 +10332,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子 工業",
+         "industry_category":"電子工業",
          "stock_id":"3432",
          "stock_name":"台端",
          "type":"twse",
@@ -11711,14 +11711,14 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子 工業",
+         "industry_category":"電子工業",
          "stock_id":"3698",
          "stock_name":"隆達",
          "type":"twse",
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子工 業",
+         "industry_category":"電子工業",
          "stock_id":"3701",
          "stock_name":"大眾控",
          "type":"twse",
@@ -13692,7 +13692,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":" 電子工業",
+         "industry_category":"電子工業",
          "stock_id":"4989",
          "stock_name":"榮科",
          "type":"twse",
@@ -13720,7 +13720,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":" 電子工業",
+         "industry_category":"電子工業",
          "stock_id":"4994",
          "stock_name":"傳奇",
          "type":"twse",
@@ -13734,7 +13734,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子工 業",
+         "industry_category":"電子工業",
          "stock_id":"4999",
          "stock_name":"鑫禾",
          "type":"twse",
@@ -14658,7 +14658,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":" 電子工業",
+         "industry_category":"電子工業",
          "stock_id":"5484",
          "stock_name":"慧友",
          "type":"twse",
@@ -16051,7 +16051,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":" 電子工業",
+         "industry_category":"電子工業",
          "stock_id":"6215",
          "stock_name":"和椿",
          "type":"twse",
@@ -16065,7 +16065,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電 子工業",
+         "industry_category":"電子工業",
          "stock_id":"6216",
          "stock_name":"居易",
          "type":"twse",
@@ -16121,7 +16121,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子工 業",
+         "industry_category":"電子工業",
          "stock_id":"6224",
          "stock_name":"聚鼎",
          "type":"twse",
@@ -16709,7 +16709,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電 子工業",
+         "industry_category":"電子工業",
          "stock_id":"6412",
          "stock_name":"群電",
          "type":"twse",
@@ -16723,7 +16723,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電 子工業",
+         "industry_category":"電子工業",
          "stock_id":"6414",
          "stock_name":"樺漢",
          "type":"twse",
@@ -16933,7 +16933,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子 工業",
+         "industry_category":"電子工業",
          "stock_id":"6449",
          "stock_name":"鈺邦",
          "type":"twse",
@@ -16982,7 +16982,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":" 電子工業",
+         "industry_category":"電子工業",
          "stock_id":"6456",
          "stock_name":"GIS-KY",
          "type":"twse",
@@ -19565,7 +19565,7 @@ AllStockdata =[
          "date":"2023-03-27"
       },
       {
-         "industry_category":"電子 工業",
+         "industry_category":"電子工業",
          "stock_id":"8261",
          "stock_name":"富鼎",
          "type":"twse",
