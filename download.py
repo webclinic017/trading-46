@@ -179,6 +179,7 @@ if __name__ == '__main__':
 
     token = "註冊 finmind 帳號後於個人資料頁面取得"
     # 從 finmind 下載資料 一個小時只能下載 200 次, 若有 token 可以下載 600 次, 將 token 填入即可, 會自動判斷在 AllStockdata 中的股票是否已經下載過, 若沒有則會自動下載
+    # 此註解為須全部重新下載時使用，若只是更新資料，則不需要此註解，只需執行 change_OTC_date() 與 change_listed_date() 獲取當日最新資料即可
     # download(token)
 
     # 刪除沒有資料的 csv 檔案, 會在 Alldata 資料夾中刪除沒有資料的 csv 檔案
