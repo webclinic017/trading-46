@@ -192,13 +192,13 @@ if __name__ == '__main__':
                 'Alldata/{}_change.csv'.format(i["stock_id"]), index_col=0, parse_dates=True)
             if pd_data.iloc[-1]['Close'] < 40:
                 # if i['industry_category'] == '電子工業':
-                print(i["stock_id"], i["stock_name"],'價格', pd_data.iloc[-1]['Close'])
+                print(i["stock_id"], i["stock_name"],
+                      '價格', pd_data.iloc[-1]['Close'])
                 stock_list.append(
                     (i["stock_id"], RSI, False, '2022-01-01', None, 100000, .000145))
         except Exception as e:
             print('error in ', i["stock_id"], i["stock_name"])
             print(e)
-        
 
     cpus = multiprocessing.cpu_count()
     pool = multiprocessing.Pool(processes=cpus)
