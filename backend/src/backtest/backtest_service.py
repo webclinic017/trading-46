@@ -73,7 +73,7 @@ def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start
         bt.plot(filename='./htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
     # bt.plot()
     # print((stats))
-    logger.info(stats)
+    logger.info(type(stats))
     
     return {stats}
 
