@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import NxWelcome from './nx-welcome';
-
+import Dndpage from '../pages/Dndpage';
 const StyledApp = styled.div`
   // Your style here
 `;
@@ -9,7 +9,8 @@ const StyledApp = styled.div`
 export function App() {
   return (
     <StyledApp>
-      <NxWelcome title="tradingfrontend" />
+      <Dndpage></Dndpage>
+      {/* <NxWelcome title="tradingfrontend" /> */}
     </StyledApp>
   );
 }

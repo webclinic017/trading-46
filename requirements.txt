@@ -1,3 +1,4 @@
 backtesting
 pandas
 selenium
+yfinance

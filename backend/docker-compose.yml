@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  api:
+    build: ./
+    ports:
+      - 8050:80
+    volumes:
+      - "D:/studyplace/python_stock/quantitativetrading/trading/htmlPlot:/htmlplots"
+  db:
+    image: mongo
+    ports:
+      - 27018:27017
+
+    volumes:
+      - taskdb:/data/db
