@@ -73,7 +73,7 @@ def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start
         bt.plot(filename='./htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
     # bt.plot()
     # print((stats))
-    logger.info(type(stats))
+    logger.info(stats)
     
     return {stats}
 
@@ -96,6 +96,7 @@ def multipreocess_backtesting( strategy, plot, start_date, end_date, cash, commi
                 #     # if i['industry_category'] == '電子工業':
                 #     print(i["stock_id"], i["stock_name"],
                 #             '價格', pd_data.iloc[-1]['Close'])
+                #     stock_list.append(
                 #     stock_list.append(
                 #         [i["stock_id"], RSI,'RSI', False, '2022-01-01', '2023-03-14', 100000, .000145,'OSCAR'])
             except Exception as e:
