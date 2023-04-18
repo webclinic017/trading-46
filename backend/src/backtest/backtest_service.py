@@ -22,14 +22,11 @@ from odmantic import ObjectId
 
 from fastapi import BackgroundTasks
 from src.personnelManagement.auth.auth_dto import User
+
+from src.htmlPlottings.htmlPlottings_service import store_htmlPlottings_src
+
 from main import logger
 import os
-
-
-
-
-
-
 
 def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start_date="2022-01-01", end_date=None, cash=1000000, commission=0.001425, username=""):
     pd_data = pd.read_csv(
@@ -73,49 +70,37 @@ def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start
         bt.plot(filename='./htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
     # bt.plot()
     # print((stats))
-    logger.info(stats)
+    # logger.info(stats.to_dict())
     
-    return {stats}
+    return stats.to_dict()
 
 
 def multipreocess_backtesting( strategy, plot, start_date, end_date, cash, commission):
     stock_list = []
     for i in AllStockdata:
-        j = 0
-        if j < 10:
-            try:
-                stock_list.append(
+        try:
+            # 如果最新一筆的資料股價大於 40元, 則不加入回測清單
+            pd_data = pd.read_csv(
+                'D:/studyplace/python_stock/quantitativetrading/trading/Alldata/{}_change.csv'.format(i["stock_id"]), index_col=0, parse_dates=True)
+            # if pd_data.iloc[-1]['Close'] < 10:
+            if i['industry_category'] == '電子工業':
+                    print(i["stock_id"], i["stock_name"],
+                            '價格', pd_data.iloc[-1]['Close'])
+                    stock_list.append(
                         [i["stock_id"], RSI,'RSI', False, '2022-01-01', '2023-03-14', 100000, .000145,'OSCAR'])
-                j = j+1
-            
-                break
-                # 如果最新一筆的資料股價大於 40元, 則不加入回測清單
-                # pd_data = pd.read_csv(
-                #     'D:/studyplace/python_stock/quantitativetrading/trading/Alldata/{}_change.csv'.format(i["stock_id"]), index_col=0, parse_dates=True)
-                # if pd_data.iloc[-1]['Close'] < 10:
-                #     # if i['industry_category'] == '電子工業':
-                #     print(i["stock_id"], i["stock_name"],
-                #             '價格', pd_data.iloc[-1]['Close'])
-                #     stock_list.append(
-                #     stock_list.append(
-                #         [i["stock_id"], RSI,'RSI', False, '2022-01-01', '2023-03-14', 100000, .000145,'OSCAR'])
-            except Exception as e:
-                print('error in ', i["stock_id"], i["stock_name"])
-                print(e)
-        else:
-            pass
+        except Exception as e:
+            print("error in ", i["stock_id"])
     # cpus = multiprocessing.cpu_count()
     # pool = multiprocessing.Pool(processes=cpus)
     # results = pool.starmap(multipreocess_backtesting, stock_list)
+    logger.info(stock_list)
     results = []
     for i in stock_list:
         try:
             data = data_backtesting_with_CSI(
                 i[0], i[1], i[2], i[3], i[4], i[5], i[6], i[7], i[8])
-            # logger.info(data.to_json())
-            # logger.info(type(data))
-            # logger.info(json.loads(data))
-            # results.append([i[0], json.loads(data)])
+            logger.info(str(data['Return [%]']),str(data['Profit Factor']))
+            results.append([i[0],data['Return [%]'],data['Profit Factor']])
         except Exception as e:
             print("error in ", i[0])
 
@@ -124,32 +109,33 @@ def multipreocess_backtesting( strategy, plot, start_date, end_date, cash, commi
     logger.info(results)
     average_return_list = []
     profit_factor = []
-    # for i in results:
-    #     if i != None:
-    #         # i[0] 為股票代號, i[1] 為回測結果
-    #         # print(i[0], i[1]['Return [%]'], i[1]['Profit Factor'])
-    #         logger.info(i)
-    #         logger.info(i[0], i[1]['Return [%]'], i[1]['Profit Factor'])
-    #         average_return_list.append(i['Return [%]'])
-    #         profit_factor.append(i['Profit Factor'])
+    for i in results:
+        if i != None:
+            # i[0] 為股票代號, i[1] 為回測結果
+            # print(i[0], i[1]['Return [%]'], i[1]['Profit Factor'])
+            logger.info(str(i))
+            logger.info(str(i[0]), str(i[1]), str(i[2]))
+            average_return_list.append(i[1])
+            profit_factor.append(i[2])
 
-    # profit_factor = [x for x in profit_factor if str(
-    #     x) != 'nan' or math.isnan(x) == False]
-    # logger.info('total number', len(profit_factor))
-    # logger.info("average totol return", sum(
-    #     average_return_list)/len(average_return_list))
-    # logger.info("average profit factor", sum(
-    #     profit_factor)/len(profit_factor))
-    # return {'average_return': sum(average_return_list)/len(average_return_list), 'average_profit_factor': sum(profit_factor)/len(profit_factor), 'total_number': len(profit_factor), 'total_return': sum(average_return_list), 'total_profit_factor': sum(profit_factor)}
+    profit_factor = [x for x in profit_factor if str(
+        x) != 'nan' or math.isnan(x) == False]
+    logger.info('total number', str(len(profit_factor)))
+    logger.info("average totol return", str(sum(
+        average_return_list)/len(average_return_list)))
+    logger.info("average profit factor", str(sum(
+        profit_factor)/len(profit_factor)))
+    return {'average_return': str(sum(average_return_list)/len(average_return_list)), 'average_profit_factor':str(sum(profit_factor)/len(profit_factor)), 'total_number': len(profit_factor)}
 
 
 def data_backtesting_with_CSI_multiple(stock_list, strategy,strategy_name,  plot, start_date="2022-01-01", end_date=None, cash=1000000, commission=0.001425, username=""):
     start_time = time.time()
 
     # BackgroundTasks.add_task(
-    multipreocess_backtesting(strategy = strategy,  plot=plot, start_date=start_date, end_date=end_date, cash=cash, commission=commission)
+    result =  multipreocess_backtesting(strategy = strategy,  plot=plot, start_date=start_date, end_date=end_date, cash=cash, commission=commission)
     end_time = time.time()
     logger.info('time elapsed', end_time - start_time)
+    return result
 
 def live_data_backtesting(self,stock_symbol):
     ''' notice: this function is still under construction

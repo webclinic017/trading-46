@@ -8,7 +8,7 @@ import requests
 import json
 from talib import abstract
 from data import AllStockdata
-from src.strategies.strategies_class import SmaCross, KdCross, RSI, MACD, BBANDS, CustomStrategy
+from src.strategies.strategies_class import SmaCross, KdCross, RSI, MACD, BBANDS, CustomStrategy,eval_class, eval_class_wiithout_indentation
 import math
 import time , random
 import multiprocessing
@@ -44,6 +44,8 @@ from src.personnelManagement.user.User_dto import User
 from src.strategies.strategies_service import StrategiesService
 
 from src.backtest.backtest_service import data_backtesting_with_CSI, data_backtesting_with_CSI_multiple
+
+from src.htmlPlottings.htmlPlottings_service import store_htmlPlottings_src
 from odmantic import ObjectId 
 
 
@@ -65,10 +67,24 @@ async def backtesting(stock_symbol: str, strategy_id:str,plot:bool,start_date:st
             logger.info("strategy_id: " + strategy_id)
             strategy = await StrategiesService.findStrategyById(id=ObjectId(strategy_id))
         except:
+            logger.error("strategy_id: " + strategy_id)
             raise ErrorCodeException(ErrorCodeLevel.User, ErrorCodeModule.Backtest)
         if strategy.strategy_name == 'SmaCross':
             process_strategy = SmaCross
-        return data_backtesting_with_CSI(stock_symbol = stock_symbol, strategy = process_strategy,strategy_name = strategy.strategy_name,plot=plot,start_date=start_date,end_date=end_date,cash=cash, commission=commission, username=current_user.email)
+        #這裡加上使用者自訂策略， 為使用輸入的程式碼，並且轉換成class
+        # process_strategy = exec(eval_class)
+        data = data_backtesting_with_CSI(stock_symbol = stock_symbol, strategy = process_strategy,strategy_name = strategy.strategy_name,plot=plot,start_date=start_date,end_date=end_date,cash=cash, commission=commission, username=current_user.email)
+        def handle_circular_and_convert_timestamps(obj):
+            if isinstance(obj, pd.Timedelta):
+                return str(obj) 
+            if isinstance(obj, pd.Timestamp):
+                return obj.strftime('%Y-%m-%d %H:%M:%S')  # Customize the format as needed
+            raise TypeError(f'Object of type {type(obj)} is not JSON serializable')
+        del data['_strategy'], data['_equity_curve'],data['_trades']
+        json_str = json.dumps(data, default=handle_circular_and_convert_timestamps)
+        await store_htmlPlottings_src(html_plotting_name= '{}_{}_{}'.format(current_user.email,strategy.strategy_name,stock_symbol), html_plotting_author =current_user.email, html_plotting_src='./htmlplots/{}_{}_{}.html'.format(current_user.email,strategy.strategy_name,stock_symbol))
+
+        return {'date': json_str}
     except Exception as e:
         logger.error(e)
         raise ErrorCodeException(ErrorCodeLevel.User, ErrorCodeModule.Backtest)

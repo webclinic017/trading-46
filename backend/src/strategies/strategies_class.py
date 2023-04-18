@@ -64,7 +64,58 @@ class BBANDS(Strategy):
             self.position.close()
 
 
+eval_class_wiithout_indentation = """
+class CustomStrategy(Strategy):
+    def init(self):
+        super().init()
+        price = self.data.Close
+        self.price = price
+        self.ma5 = self.I(SMA, price, 5)
+        self.ma10 = self.I(SMA, price, 10)
+        self.ma20 = self.I(SMA, price, 20)
+        self.ma25 = self.I(SMA, price, 25)
+        self.ma60 = self.I(SMA, price, 60)
+        self.ma120 = self.I(SMA, price, 120)
+        self.buy_pct = 0.5
+        self.sell_pct = 1
+    def next(self):
+        # 若是持有股票，且收盤價低於 25 日均線，則賣出 100% 的股票
+        if crossover(self.ma25, self.price):
+            if self.position:
+                self.sell(size=self.sell_pct)
+        if crossover(self.ma5, self.ma10) or crossover(self.ma10, self.ma20):
+            self.buy(size=self.buy_pct)
+        if crossover(self.ma20, self.ma10) and crossover(self.ma10, self.ma5):
+            if crossover(self.ma5, self.ma25):
+                self.sell(size=self.sell_pct)
+"""
 
+eval_class = """
+from backtesting import Backtest, Strategy
+class CustomStrategy2(Strategy):
+    def init(self):
+        super().init()
+        price = self.data.Close
+        self.price = price
+        self.ma5 = self.I(SMA, price, 5)
+        self.ma10 = self.I(SMA, price, 10)
+        self.ma20 = self.I(SMA, price, 20)
+        self.ma25 = self.I(SMA, price, 25)
+        self.ma60 = self.I(SMA, price, 60)
+        self.ma120 = self.I(SMA, price, 120)
+        self.buy_pct = 0.5
+        self.sell_pct = 1
+    def next(self):
+        # 若是持有股票，且收盤價低於 25 日均線，則賣出 100% 的股票
+        if crossover(self.ma25, self.price):
+            if self.position:
+                self.sell(size=self.sell_pct)
+        if crossover(self.ma5, self.ma10) or crossover(self.ma10, self.ma20):
+            self.buy(size=self.buy_pct)
+        if crossover(self.ma20, self.ma10) and crossover(self.ma10, self.ma5):
+            if crossover(self.ma5, self.ma25):
+                self.sell(size=self.sell_pct)
+"""
 class CustomStrategy(Strategy):
     def init(self):
         super().init()
