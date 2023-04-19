@@ -67,6 +67,7 @@ app = FastAPI()
 pool = Pool(processes=4) 
 origins = [
     "http://localhost",
+    "http://localhost:4200",
     "http://localhost:8000",
     "http://localhost:8050",
     "http://localhost:8080",

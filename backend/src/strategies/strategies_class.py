@@ -91,7 +91,6 @@ class CustomStrategy(Strategy):
 """
 
 eval_class = """
-from backtesting import Backtest, Strategy
 class CustomStrategy2(Strategy):
     def init(self):
         super().init()
