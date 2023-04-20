@@ -5,7 +5,7 @@ from typing import Dict, Optional
 from fastapi import APIRouter,FastAPI, File, Form, UploadFile
 from fastapi import Depends
 from starlette.responses import Response
-from mongodb_controller.mongodb_controller import getMongoEngine 
+from mongodb_controller.mongodb_controller import MongoEngine 
 
 from src.personnelManagement.auth.auth_service import *
 from src.personnelManagement.auth.auth_dto import UpdateUser, User

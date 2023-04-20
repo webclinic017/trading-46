@@ -3,7 +3,7 @@ from src.general.errorCode import ErrorCodeException, ErrorCodeLevel, ErrorCodeM
 from src.general.deleteByIdObject import *
 import odmantic
 from .Company_dto import Company, CompanyPatchSchema
-from mongodb_controller.mongodb_controller import engine
+from mongodb_controller.mongodb_controller import MongoEngine
 
 from odmantic import  ObjectId
 
@@ -23,7 +23,7 @@ class CompanyService():
             dict: all companies the user can query
         """
         
-        companies = await engine.find(Company, odmantic.query.not_in(Company.blacklist,  [userCompanyId]), skip= skip, limit =limit)
+        companies = await MongoEngine.getEngine().find(Company, odmantic.query.not_in(Company.blacklist,  [userCompanyId]), skip= skip, limit =limit)
         userWhiteList = []
         for company in companies:
             companyTemp: dict = dict(company)
@@ -54,7 +54,7 @@ class CompanyService():
             [type]: all companies the user can query
         """
         
-        company= await engine.find_one(Company, odmantic.query.and_(Company.id == queryCompanyId, odmantic.query.not_in(Company.blacklist,  [userCompanyId])))
+        company= await MongoEngine.getEngine().find_one(Company, odmantic.query.and_(Company.id == queryCompanyId, odmantic.query.not_in(Company.blacklist,  [userCompanyId])))
 
         if company is None:
                 raise ErrorCodeException(error_message="Not found!",error_code=ErrorCodeLevel.System + ErrorCodeModule.Company + "0001")
@@ -79,7 +79,7 @@ class CompanyService():
         Returns:
             Company: query company
         """
-        company= await engine.find_one(Company, Company.id == queryCompanyId)
+        company= await MongoEngine.getEngine().find_one(Company, Company.id == queryCompanyId)
 
         if company is None:
                 raise ErrorCodeException(error_message="Not fount! ",error_code= ErrorCodeLevel.System + ErrorCodeModule.Company +  "0001")
@@ -95,7 +95,7 @@ class CompanyService():
         Returns:
             Company: new company info
         """
-        company= await engine.save(company)
+        company= await MongoEngine.getEngine().save(company)
 
         return company
     
@@ -118,7 +118,7 @@ class CompanyService():
                     setattr(dictVal, name, value)
             else:
                 setattr(oldCompany, name, value)
-        newCompany = await engine.save(oldCompany)
+        newCompany = await MongoEngine.getEngine().save(oldCompany)
         return newCompany
     
     async def deleteCompany(self, id:ObjectId):
@@ -130,5 +130,5 @@ class CompanyService():
             str: success
         """
         obj = DeleteByIdObject(id=id,collection="Company",primary_key="id")
-        await engine.delete(obj)
+        await MongoEngine.getEngine().delete(obj)
         return "success"

@@ -6,11 +6,10 @@ from .Company_dto import Company, CompanyPatchSchema
 
 from fastapi import APIRouter
 from fastapi import Depends, HTTPException
-from mongodb_controller.mongodb_controller import engine
+from mongodb_controller.mongodb_controller import MongoEngine
 from src.personnelManagement.auth.auth_service import get_current_active_user
 from src.personnelManagement.auth.auth_dto import User
 from odmantic import ObjectId
-from mongodb_controller.mongodb_controller import getMongoEngine
 from main import logger
 company_router = APIRouter(
     prefix="/companies",

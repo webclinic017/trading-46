@@ -17,7 +17,7 @@ from fastapi.params import Depends
 
 from src.general.deleteByIdObject import *
 from src.general.errorCode import ErrorCodeException, ErrorCodeLevel, ErrorCodeModule
-from mongodb_controller.mongodb_controller import engine
+from mongodb_controller.mongodb_controller import MongoEngine
 from odmantic import ObjectId
 
 from fastapi import BackgroundTasks
@@ -47,10 +47,10 @@ async def store_htmlPlottings_src(html_plotting_strategy:str,html_plotting_name:
         # html_plotting_created_date = html_plotting_created_date,
         # html_plotting_updated_date = html_plotting_updated_date
     )
-    await engine.save(htmlPlottings)
+    await MongoEngine.getEngine().save(htmlPlottings)
     return {"message": "Add htmlPlottings successfully"}
 
 async def check_htmlPlottings_name_exist(html_plotting_name: str):
     logger.info("check_htmlPlottings_name_exist", html_plotting_name)
-    htmlPlottings = await engine.find_one(HtmlPlottings, HtmlPlottings.html_plotting_name == html_plotting_name)
+    htmlPlottings = await MongoEngine.getEngine().find_one(HtmlPlottings, HtmlPlottings.html_plotting_name == html_plotting_name)
     return htmlPlottings

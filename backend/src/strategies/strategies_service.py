@@ -17,7 +17,7 @@ import multiprocessing
 import pprint
 from src.general.deleteByIdObject import *
 from src.general.errorCode import ErrorCodeException, ErrorCodeLevel, ErrorCodeModule
-from mongodb_controller.mongodb_controller import engine
+from mongodb_controller.mongodb_controller import MongoEngine
 from odmantic import ObjectId
 
 from fastapi import Depends, HTTPException
@@ -43,9 +43,9 @@ class StrategiesService():
             strategy_status = strategy_status
         )
 
-        await engine.save(strategy)
+        await MongoEngine.getEngine().save(strategy)
         return {"message": "Add strategy successfully"}
     async def findStrategyById(id: ObjectId):
         logger.info("findStrategyById", id)
-        strategy = await engine.find_one(Strategy, Strategy.id == ObjectId(id))
+        strategy = await MongoEngine.getEngine().find_one(Strategy, Strategy.id == ObjectId(id))
         return strategy

@@ -6,11 +6,30 @@ services:
     ports:
       - 8050:80
     volumes:
-      - "D:/studyplace/python_stock/quantitativetrading/trading/htmlPlot:/htmlplots"
-  db:
-    image: mongo
+      - "../staticfilesserver/staticfiles/htmlplots:/htmlplots"
+      - "../Alldata:/csvdata"
+    environment:
+      MONGODB_HOST: mongodb
+    networks:
+      - backtest-network
+  mongodb:
+    container_name: mongodb
+    restart: always
+    # command: [--auth]
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: oscar
+        MONGO_INITDB_ROOT_PASSWORD: 12345678
+        # - MONGO_INITDB_DATABASE=backtest
+    image: mongo:latest
     ports:
       - 27018:27017
-
     volumes:
-      - taskdb:/data/db
+      # - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./data/mongo:/data/db
+    networks:
+      - backtest-network
+networks:
+  backtest-network:
+      driver: bridge
+volumes:
+  taskdb: 

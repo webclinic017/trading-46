@@ -5,7 +5,7 @@ from fastapi.params import Depends
 from fastapi.security.oauth2 import OAuth2PasswordBearer
 from src.personnelManagement.user.user_service import UserService
 from src.personnelManagement.role.role_service import RoleService
-from mongodb_controller.mongodb_controller import engine
+from mongodb_controller.mongodb_controller import MongoEngine
 from datetime import datetime, timedelta
 from typing import Optional
 import os
@@ -34,7 +34,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         except JWTError:
             raise credentials_exception
             
-        loginUser: User = await engine.find_one(User, User.email==email)
+        loginUser: User = await MongoEngine.getEngine().find_one(User, User.email==email)
 
         if loginUser is None:
             raise credentials_exception
@@ -94,7 +94,7 @@ class AuthService():
             userDto.password = bcrypt.hashpw(userDto.password.encode('utf-8'), bcrypt.gensalt())
             domain = os.getenv('DOMAINNAME')
             userDto.avatarUrl = domain + str(userDto.id)
-            users = await engine.save(userDto)
+            users = await MongoEngine.getEngine().save(userDto)
             return users
         
     async def authenticate_user(self, email:str, password:str):

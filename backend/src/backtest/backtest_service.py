@@ -17,7 +17,7 @@ from fastapi.params import Depends
 
 from src.general.deleteByIdObject import *
 from src.general.errorCode import ErrorCodeException, ErrorCodeLevel, ErrorCodeModule
-from mongodb_controller.mongodb_controller import engine
+from mongodb_controller.mongodb_controller import MongoEngine
 from odmantic import ObjectId
 
 from fastapi import BackgroundTasks
@@ -30,7 +30,8 @@ import os
 
 def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start_date="2022-01-01", end_date=None, cash=1000000, commission=0.001425, username=""):
     pd_data = pd.read_csv(
-        'D:/studyplace/python_stock/quantitativetrading/trading/Alldata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
+        '../csvdata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
+        # 'D:/studyplace/python_stock/quantitativetrading/trading/Alldata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
 
     # 將資料轉換成talib可以使用的格式
     pd_data2 = pd_data.rename(
@@ -67,7 +68,7 @@ def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start
                 exclusive_orders=True)
     stats = bt.run()
     if plot:
-        bt.plot(filename='./htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
+        bt.plot(filename='../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
     # bt.plot()
     # print((stats))
     # logger.info(stats.to_dict())

@@ -1,18 +1,41 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+from pymongo import MongoClient
 from motor.motor_asyncio import AsyncIOMotorClient
-from odmantic import AIOEngine
+from odmantic import AIOEngine, ObjectId
 
-DATABASE = "test"
-CONNECTION_STRING = "mongodb://localhost:27019/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
 
-uri = CONNECTION_STRING 
-client = AsyncIOMotorClient(uri)
-engine = AIOEngine(client=client, database=DATABASE)
+class MongoEngine:
 
-   
-def getMongoEngine():
-    """
-    ! Discard
-    """
-    pass
-    
+    MONGO_USERNAME = 'oscar'
+    MONGO_PASSWORD = '12345678'
+    MONGO_HOST = 'mongodb'
+    # MONGO_HOST = 'localhost'
+
+
+    # MONGO_AUTHSOURCE = 'admin'
+
+    # uri = f"mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_HOST}:27017"
+    uri = f"mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_HOST}:27017/?authMechanism=DEFAULT"
+
+    client = AsyncIOMotorClient(uri)
+    engine = AIOEngine(client=client, database="backtest")
+
+    _instance = None
+
+    def __init__(self):
+        if MongoEngine._instance is not None:
+            raise Exception('only one instance can exist')
+        else:
+            self._id = id(self)
+            MongoEngine._instance = self
+
+    def get_id(self):
+        return self._id
+
+    @staticmethod
+    def getEngine():
+        if MongoEngine._instance is None:
+            MongoEngine()
+        return MongoEngine._instance.engine
 

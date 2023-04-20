@@ -15,7 +15,7 @@ import multiprocessing
 import pprint
 from src.general.deleteByIdObject import *
 from src.general.errorCode import ErrorCodeException, ErrorCodeLevel, ErrorCodeModule
-from mongodb_controller.mongodb_controller import engine
+from mongodb_controller.mongodb_controller import MongoEngine
 from odmantic import ObjectId
 
 from src.personnelManagement.auth.auth_dto import User

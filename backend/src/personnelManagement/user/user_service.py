@@ -1,5 +1,5 @@
 
-from mongodb_controller.mongodb_controller import engine
+from mongodb_controller.mongodb_controller import MongoEngine
 
 from odmantic import ObjectId
 from .User_dto import  User, UserPatchSchema
@@ -21,7 +21,7 @@ class UserService():
             None
         """
 
-        users = await engine.find(User)
+        users = await MongoEngine.getEngine().find(User)
         return users
 
     async def findAllManagers(self):
@@ -38,7 +38,7 @@ class UserService():
             None
         """
         managerRole = await RoleService().findRoleByName("manager")
-        users = await engine.find(User, User.role == managerRole.id)
+        users = await MongoEngine.getEngine().find(User, User.role == managerRole.id)
         return users
     
     async def findUserByEmail(self, email: str):
@@ -55,7 +55,7 @@ class UserService():
             None
         """
 
-        user = await engine.find_one(User, User.email == email)
+        user = await MongoEngine.getEngine().find_one(User, User.email == email)
         return user
 
     async def findUserById(self, id: str):
@@ -71,7 +71,7 @@ class UserService():
         Raises:
             None
         """
-        user = await engine.find_one(User, User.id == ObjectId(id))
+        user = await MongoEngine.getEngine().find_one(User, User.id == ObjectId(id))
         return user
 
 
@@ -97,7 +97,7 @@ class UserService():
             else:
                 if hasattr(oldUser, name) :
                     setattr(oldUser, name, value)
-        newUser = await engine.save(oldUser)
+        newUser = await MongoEngine.getEngine().save(oldUser)
         return newUser
     
     async def updateUser(self, userDto:User) :
@@ -109,7 +109,7 @@ class UserService():
         Returns:
             [type]: [description]
         """
-        user = await engine.save(userDto)
+        user = await MongoEngine.getEngine().save(userDto)
         return user
     
     async def deleteUser(self, user: User):
@@ -122,5 +122,5 @@ class UserService():
         Raises:
             None
         """
-        await engine.delete(user)
+        await MongoEngine.getEngine().delete(user)
         return "success"

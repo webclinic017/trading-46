@@ -24,7 +24,7 @@ export default function Backtest() {
             'email': username,
             'password': password
         }
-        await axios.post('http://localhost:8000/api/v1/auth/login', data).then(response => {
+        await axios.post('http://localhost:8050/api/v1/auth/login', data).then(response => {
             console.log(response.data);
             localStorage.setItem('access_token', response.data.access_token);
         }
@@ -68,7 +68,7 @@ export default function Backtest() {
             headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
         };
         
-        await axios.post('http://localhost:8000/api/v1/backtest/single_backtesting_with_custom_strategy', data, config).then(response => {
+        await axios.post('http://localhost:8050/api/v1/backtest/single_backtesting_with_custom_strategy', data, config).then(response => {
             console.log(response.data);
             setResponse(response.data.date);
         }
@@ -76,6 +76,9 @@ export default function Backtest() {
             console.log(error);
         });
     }
+    // http://localhost:4041/htmlplots/test01@example.com_asd_2330.html
+    let backtest_str = `http://localhost:4041/htmlplots/test01@example.com_asd_${all_data.stock_symbol}.html`;
+    console.log(backtest_str)
     return (
         <div style={{ position: 'absolute', right: '150px', top: '150px' , maxWidth:'800px'}}>
             <Card sx={{ display: 'flex' }}>
@@ -200,6 +203,7 @@ export default function Backtest() {
                         </TextField>
                         <Button variant="contained" onClick={()=>{single_test_with_custom_strategy()}}>Single Back Test</Button>
                         {response}
+                        <iframe title= "cool" src= {backtest_str} width="700px" height="500px"></iframe>
                     </Box>
                 </Typography>
             </Card>

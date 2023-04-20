@@ -46,7 +46,8 @@ async def login_for_access_token(loginUser: LoginUser):
 @auth_router.post("/form/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     try:
-    
+        logger.info("form_data.username: " + form_data.username)
+        logger.info("form_data.password: " + form_data.password)
         jwtToken, loginUserName, email, userid= await AuthService().authenticate_user(form_data.username, form_data.password)
     
 

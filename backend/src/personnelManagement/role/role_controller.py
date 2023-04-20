@@ -16,6 +16,14 @@ role_router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
+@role_router.post("creatGuestRole")
+async def create_guest_role():
+    try:
+        guestRole = await RoleService().createRole(Role(name="guest",permissions=[]))
+        return guestRole
+    except BaseException as e:
+        raise HTTPException(status_code=401, detail=e)
+    
 
 @role_router.post("/")
 async def create_new_role(role:Role, current_user: User = Depends(get_current_active_user)):

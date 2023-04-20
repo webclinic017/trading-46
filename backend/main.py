@@ -1,6 +1,5 @@
 from fastapi.exceptions import HTTPException
 from starlette.responses import JSONResponse
-from mongodb_controller.mongodb_controller import  CONNECTION_STRING, DATABASE
 from multiprocessing import Process
 import os
 import asyncio

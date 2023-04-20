@@ -2,7 +2,7 @@
 from src.general.errorCode import ErrorCodeException, ErrorCodeLevel, ErrorCodeModule
 from src.personnelManagement.auth.Permission import Permission
 from src.personnelManagement.role.Role_dto import Role, RolePatchSchema
-from mongodb_controller.mongodb_controller import  engine
+from mongodb_controller.mongodb_controller import  MongoEngine
 
 from odmantic import ObjectId
 
@@ -11,11 +11,11 @@ from odmantic import ObjectId
     
 class RoleService():
     async def createManagerRole(self):
-        managerRole = await engine.find_one(Role, Role.name == 'manager')
+        managerRole = await MongoEngine.getEngine().find_one(Role, Role.name == 'manager')
         if managerRole is None:
             managerPermissions = [Permission.CreateProject, Permission.UpdateBridge]
             managerRole =  Role(name="manager", permissions=managerPermissions, description="manager")
-            await engine.save(managerRole)
+            await MongoEngine.getEngine().save(managerRole)
         return managerRole 
             
         
@@ -32,11 +32,11 @@ class RoleService():
             ValueError: if role name already exists
         """
         
-        isExist = await engine.find(Role, Role.name == role.name)
+        isExist = await MongoEngine.getEngine().find(Role, Role.name == role.name)
         if isExist:
             raise ErrorCodeException(error_message="Role name already exists!",error_code= ErrorCodeLevel.System + ErrorCodeModule.Role +  "0002")
         else:
-            newRole = await engine.save(role)
+            newRole = await MongoEngine.getEngine().save(role)
         return newRole
     
     async def findRoleByName(self, name:str):
@@ -54,12 +54,12 @@ class RoleService():
        
         
    
-        role = await engine.find_one(Role, Role.name == name)
+        role = await MongoEngine.getEngine().find_one(Role, Role.name == name)
         # init guest Role 
         if name == "guest" and role is None:
             guestRole = Role(name = "guest", permissions=[Permission.View], description="guest Only view!")
             await self.createRole(guestRole)
-        role = await engine.find_one(Role, Role.name == name)
+        role = await MongoEngine.getEngine().find_one(Role, Role.name == name)
         return role
     
     async def findRoleById(self, id:str):
@@ -74,7 +74,7 @@ class RoleService():
         Raises:
             None
         """
-        role = await engine.find_one(Role, Role.id == ObjectId(id))
+        role = await MongoEngine.getEngine().find_one(Role, Role.id == ObjectId(id))
         return role
     
     async def findAllRoles(self, skip=0, limit=10):
@@ -89,7 +89,7 @@ class RoleService():
         Raises:
             None
         """
-        role = await engine.find(Role, skip=skip, limit=limit)
+        role = await MongoEngine.getEngine().find(Role, skip=skip, limit=limit)
         return role
     
     async def updateRole(self,rolePatch:RolePatchSchema, role:Role):
@@ -113,7 +113,7 @@ class RoleService():
             else:
                 if hasattr(role, name) :
                     setattr(role, name, value)
-        newRole = await engine.save(role)
+        newRole = await MongoEngine.getEngine().save(role)
         return newRole
     
     async def deleteRole(self, role:Role):
@@ -126,5 +126,5 @@ class RoleService():
         Raises:
             None
         """
-        await engine.delete(role)
+        await MongoEngine.getEngine().delete(role)
         return "success"

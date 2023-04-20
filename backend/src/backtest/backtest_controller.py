@@ -17,7 +17,7 @@ from typing import List
 
 from src.general.deleteByIdObject import *
 from src.general.errorCode import ErrorCodeException, ErrorCodeLevel, ErrorCodeModule
-from mongodb_controller.mongodb_controller import engine
+from mongodb_controller.mongodb_controller import MongoEngine
 from odmantic import ObjectId
 
 from src.personnelManagement.auth.auth_dto import User
@@ -48,7 +48,7 @@ from src.backtest.backtest_service import data_backtesting_with_CSI, data_backte
 from src.htmlPlottings.htmlPlottings_service import store_htmlPlottings_src
 from odmantic import ObjectId 
 
-from pydantic import BaseModel
+from odmantic import Model
 
 
 
@@ -57,7 +57,7 @@ backtest_router = APIRouter(
     tags=["backtest"],
     responses={404: {"description": "Not found"}},
 )
-class single_backtesting_with_custom_strategy(BaseModel):
+class single_backtesting_with_custom_strategy(Model):
     buy_strategy:str
     sellstrategy:str
     stock_symbol: str
