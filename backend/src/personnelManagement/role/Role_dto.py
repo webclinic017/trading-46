@@ -1,7 +1,6 @@
 """
     * draft
 """
-from pydantic import  validator
 from typing import  List, Optional
 from odmantic import  Model, Field
 from src.personnelManagement.auth.Permission import Permission

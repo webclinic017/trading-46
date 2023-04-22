@@ -68,6 +68,7 @@ def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start
                 exclusive_orders=True)
     stats = bt.run()
     if plot:
+        os.remove('../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol))
         bt.plot(filename='../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
     # bt.plot()
     # print((stats))

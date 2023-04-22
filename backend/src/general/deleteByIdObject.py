@@ -52,10 +52,10 @@ async def delete_many(
         """
         delete_count = 0
         not_found_instances: List[ModelType] = []
-        motor_cursor = MongoEngine.getEngine.find(model, *queries)
+        motor_cursor = engine.find(model, *queries)
         async for instance in motor_cursor:
             try:
-                await MongoEngine.getEngine.delete(instance)
+                await engine.delete(instance)
             except DocumentNotFoundError:
                 not_found_instances.append(instance)
             else:

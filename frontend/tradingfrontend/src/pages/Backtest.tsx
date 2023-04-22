@@ -37,7 +37,7 @@ export default function Backtest() {
     }, []);
     const [all_data, setAll_data] = useState({
         'stock_symbol': '2033',
-        'strategy_id': '643cef650d2529c412e08f98',
+        'strategy_id': '6440e166e21de61de0e59e50',
         'buy_strategy': 'self.buy_pct = 0.5ChangeLine                self.sell_pct = 1',
         'sell_strategy': 'if backtesting.lib.crossover(self.ma10, self.ma20): self.buy()ChangeLine                elif backtesting.lib.crossover(self.ma20, self.ma10): self.sell()',
         'plot': 'true',

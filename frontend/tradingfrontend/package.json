@@ -10,10 +10,12 @@
   "private": true,
   "dependencies": {
     "@dnd-kit/core": "^6.0.8",
+    "@dnd-kit/modifiers": "^6.0.1",
     "@dnd-kit/sortable": "^7.0.2",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.16",
+    "@mui/lab": "^5.0.0-alpha.127",
     "@mui/material": "^5.12.1",
     "@mui/styled-engine-sc": "^5.12.0",
     "axios": "^1.3.5",

@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 from enum import unique
 from typing import Optional, List
 from odmantic import AIOEngine, Model, Field, ObjectId, Reference
-from pydantic import validator
 from src.personnelManagement.company.Company_dto import Company
 from src.personnelManagement.role.Role_dto import Role
 
