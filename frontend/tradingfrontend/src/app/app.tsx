@@ -6,6 +6,8 @@ import Backtest from '../pages/Backtest';
 import StackedExample from "src/components/Navbar";
 import LeftTabsExample from "src/components/NabarBootstrap";
 import SingleBacktest from "src/pages/SingleBacktest";
+import SignIn from "src/pages/SignIn";
+import SignUp from "src/pages/SignUp";
 import MakeStrategy from "src/pages/MakeStrategy";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "src/scss/styles.scss";
@@ -19,13 +21,18 @@ export function App() {
   return (
     <StyledApp>
       <BrowserRouter>
+        <Routes>
+          <Route path="/" Component={SignIn} />
+          <Route path="/signup" Component={SignUp} />
+        </Routes>
         {/* <LeftTabsExample></LeftTabsExample> */}
-        <StackedExample></StackedExample>
+
 
         <Routes>
-          <Route path="/" Component={SingleBacktest} />
-          <Route path="/backtest" Component={Backtest} />
-          <Route path="/makestrategy" Component={MakeStrategy} />
+          <Route path="/backtest" element={<><StackedExample />
+            <SingleBacktest /></>} />
+          <Route path="/backtest" element={<><StackedExample /><Backtest /></>} />
+          <Route path="/makestrategy" element={<><StackedExample /><MakeStrategy /></>} />
         </Routes>
       </BrowserRouter>
       {/* <Dndpage></Dndpage> */}
