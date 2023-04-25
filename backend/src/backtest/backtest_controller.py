@@ -58,8 +58,6 @@ backtest_router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 class single_backtesting_with_custom_strategy(Model):
-    buy_strategy:str
-    sellstrategy:str
     stock_symbol: str
     strategy_id:str
     plot:bool
@@ -81,8 +79,6 @@ async def backtesting(single_backtesting_with_custom_strategy:single_backtesting
     end_date = single_backtesting_with_custom_strategy['end_date']
     cash = single_backtesting_with_custom_strategy['cash']
     commission = single_backtesting_with_custom_strategy['commission']
-    buy_strategy = single_backtesting_with_custom_strategy['buy_strategy']
-    sellstrategy = single_backtesting_with_custom_strategy['sellstrategy']
 
     logger.info(single_backtesting_with_custom_strategy)
     try:
@@ -92,38 +88,9 @@ async def backtesting(single_backtesting_with_custom_strategy:single_backtesting
         except:
             logger.error("strategy_id: " + single_backtesting_with_custom_strategy.strategy_id)
             raise ErrorCodeException(ErrorCodeLevel.User, ErrorCodeModule.Backtest)
-        if strategy.strategy_name == 'SmaCross':
-            process_strategy = SmaCross
-        #這裡加上使用者自訂策略， 為使用輸入的程式碼，並且轉換成class
-        buy_strategy = str(buy_strategy)
-        sellstrategy = str(sellstrategy)
-        buy_strategy = buy_strategy.replace('ChangeLine', '\n')
-        sellstrategy = sellstrategy.replace('ChangeLine', '\n')
-        logger.info(buy_strategy)
-        logger.info(sellstrategy)
-        custom_strategy = f"""\nimport backtesting\nclass CustomStrategy2(backtesting.Strategy):
-            def init(self):
-                super().init()
-                price = self.data.Close
-                self.price = price
-                self.ma5 = self.I(backtesting.test.SMA, price, 5)
-                self.ma10 = self.I(backtesting.test.SMA, price, 10)
-                self.ma20 = self.I(backtesting.test.SMA, price, 20)
-                self.ma25 = self.I(backtesting.test.SMA, price, 25)
-                self.ma60 = self.I(backtesting.test.SMA, price, 60)
-                self.ma120 = self.I(backtesting.test.SMA, price, 120)
-                {buy_strategy}
-            def next(self):
-                {sellstrategy}
-        """
-        # self.buy_pct = 0.5ChangeLine                self.sell_pct = 1
-        #if backtesting.lib.crossover(self.ma10, self.ma20): self.buy()ChangeLine                elif backtesting.lib.crossover(self.ma20, self.ma10): self.sell()
-        custom_strategy_vars = {}
-        logger.info(custom_strategy)
-        exec(custom_strategy, custom_strategy_vars)
-        logger.info(custom_strategy_vars['CustomStrategy2'])
 
-        data = data_backtesting_with_CSI(stock_symbol = stock_symbol, strategy =custom_strategy_vars['CustomStrategy2'],strategy_name = strategy.strategy_name,plot=plot,start_date=start_date,end_date=end_date,cash=cash, commission=commission, username=current_user.email)
+
+        data = data_backtesting_with_CSI(stock_symbol = stock_symbol, strategy =strategy,strategy_name = strategy.strategy_name,plot=plot,start_date=start_date,end_date=end_date,cash=cash, commission=commission, username=current_user.email)
         def handle_circular_and_convert_timestamps(obj):
             if isinstance(obj, pd.Timedelta):
                 return str(obj) 

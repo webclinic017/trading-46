@@ -25,13 +25,15 @@ from src.personnelManagement.auth.auth_dto import User
 
 from src.htmlPlottings.htmlPlottings_service import store_htmlPlottings_src
 
+from src.backtest.backtest_params import BacktestParams
+
 from main import logger
 import os
 
 def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start_date="2022-01-01", end_date=None, cash=1000000, commission=0.001425, username=""):
     pd_data = pd.read_csv(
-        '../csvdata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
-        # 'D:/studyplace/python_stock/quantitativetrading/trading/Alldata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
+        # '../csvdata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
+        'D:/studyplace/python_stock/quantitativetrading/trading/Alldata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
 
     # 將資料轉換成talib可以使用的格式
     pd_data2 = pd_data.rename(
@@ -60,7 +62,64 @@ def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start
         end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d')
 
     data = pd_data_with_kd.loc[desired_date:end_date]
+    #這裡加上使用者自訂策略， 為使用輸入的程式碼，並且轉換成class
+    buy_scipt_or_string = ""
+    buy_script_and_string = ""
+    buy_script_and_buy_pct = ""
+    sell_script_or_string = ""
+    sell_script_and_string = ""
+    sell_script_and_sell_pct = ""
+    buy_indent = "            "
+    sell_indent = "            "
+    for buy_script in strategy.strategy_code.buy_signal:
+        if buy_script[0] == "standard":
+            if buy_script[1] == "and":                    
+                buy_script_and_string += f"{buy_indent}if {BacktestParams(buy_script[2])} {BacktestParams(buy_script[3])} {BacktestParams(buy_script[4])}:\n"
+                buy_script_and_buy_pct = buy_script[5]
+                buy_indent += "    "
+            elif buy_script[1] == "or":
+                buy_scipt_or_string += f"            if {BacktestParams(buy_script[2])} {BacktestParams(buy_script[3])} {BacktestParams(buy_script[4])}:\n                self.buy(size={float(buy_script[5])})\n"
+    if buy_script_and_buy_pct != "":
+        buy_script_and_string += f"{buy_indent}self.buy(size={buy_script_and_buy_pct})\n"
+    for sell_script in strategy.strategy_code.sell_signal:
+        if sell_script[0] == "standard":
+            if sell_script[1] == "and":                    
+                sell_script_and_string += f"{sell_indent}if {BacktestParams(sell_script[2])} {BacktestParams(sell_script[3])} {BacktestParams(sell_script[4])}:\n"
+                sell_script_and_sell_pct = sell_script[5]
+                sell_indent += "    "
+            elif sell_script[1] == "or":
+                sell_script_or_string += f"            if {BacktestParams(sell_script[2])} {BacktestParams(sell_script[3])} {BacktestParams(sell_script[4])}:\n                self.sell(size={float(sell_script[5])})\n"
+    if sell_script_and_sell_pct != "":
+        sell_script_and_string += f"{sell_indent}self.sell(size={sell_script_and_sell_pct})\n"
+    if strategy.strategy_code.buy_first == True:
+        next_strategy_string = buy_script_and_string + buy_scipt_or_string + sell_script_or_string + sell_script_and_string
+    else:
+        next_strategy_string = sell_script_and_string + sell_script_or_string + buy_script_and_string + buy_scipt_or_string
 
+    
+    custom_strategy = f"""\nimport backtesting\nclass CustomStrategy2(backtesting.Strategy):
+        def init(self):
+            super().init()
+            price = self.data.Close
+            self.price = price
+            self.ma5 = self.I(backtesting.test.SMA, price, 5)
+            self.ma10 = self.I(backtesting.test.SMA, price, 10)
+            self.ma20 = self.I(backtesting.test.SMA, price, 20)
+            self.ma25 = self.I(backtesting.test.SMA, price, 25)
+            self.ma60 = self.I(backtesting.test.SMA, price, 60)
+            self.ma120 = self.I(backtesting.test.SMA, price, 120)
+        def next(self):
+{next_strategy_string}
+    """
+    logger.info(custom_strategy)
+    custom_strategy_vars = {}
+
+    # self.buy_pct = 0.5ChangeLine                self.sell_pct = 1
+    #if backtesting.lib.crossover(self.ma10, self.ma20): self.buy()ChangeLine                elif backtesting.lib.crossover(self.ma20, self.ma10): self.sell()
+    # logger.info(custom_strategy)
+    exec(custom_strategy, custom_strategy_vars)
+    strategy = custom_strategy_vars['CustomStrategy2']
+    # logger.info(custom_strategy_vars['CustomStrategy2'])
     # data = pd.read_csv(
     #     'Alldata/1336_change.csv', index_col=0, parse_dates=True)
 
@@ -68,8 +127,12 @@ def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start
                 exclusive_orders=True)
     stats = bt.run()
     if plot:
-        os.remove('../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol))
-        bt.plot(filename='../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
+        if os.path.isfile('../../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol)):
+            os.remove('../../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol))
+        bt.plot(filename='../../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)      
+        # if os.path.isfile('../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol)):
+        #     os.remove('../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol))
+        # bt.plot(filename='../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
     # bt.plot()
     # print((stats))
     # logger.info(stats.to_dict())

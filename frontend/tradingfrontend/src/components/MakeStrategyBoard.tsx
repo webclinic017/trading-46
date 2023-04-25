@@ -245,7 +245,27 @@ export default function MakeStrategyBoard() {
                     </Box>
                 </Stack>
                 </Box>
-                <Card sx={{ display: 'flex' }}>
+                
+                </Stack>
+                <Box style={{ width: "50%" }}>
+                    <ControlledTreeView handleSelectedFactors={handleSelectedFactors} />
+                </Box>
+            </Stack>
+            {/* <Box sx={{ mb: 1 }}>
+                <Button >
+                    新增策略
+                </Button>
+                <Button >
+                    及時回測
+                </Button>
+            </Box> */}
+        </>
+
+    )
+
+
+}
+{/* <Card sx={{ display: 'flex' }}>
                 <Typography component="div" sx={{ display: 'flex', flexDirection: 'column' }}>
                     <CardContent sx={{ flex: '1 0 auto' }}>
                         <Typography component="div" variant="h5">
@@ -370,23 +390,4 @@ export default function MakeStrategyBoard() {
                         <iframe title= "cool" src= {backtest_str} width="700px" height="500px"></iframe>
                     </Box>
                 </Typography>
-            </Card>
-                </Stack>
-                <Box style={{ width: "50%" }}>
-                    <ControlledTreeView handleSelectedFactors={handleSelectedFactors} />
-                </Box>
-            </Stack>
-            {/* <Box sx={{ mb: 1 }}>
-                <Button >
-                    新增策略
-                </Button>
-                <Button >
-                    及時回測
-                </Button>
-            </Box> */}
-        </>
-
-    )
-
-
-}
+            </Card> */}

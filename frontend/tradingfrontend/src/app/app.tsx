@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-
+import React from 'react';
 import NxWelcome from './nx-welcome';
 import Dndpage from '../pages/Dndpage';
 import Backtest from '../pages/Backtest';
@@ -12,31 +12,36 @@ import MakeStrategy from "src/pages/MakeStrategy";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "src/scss/styles.scss";
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-
+import { StrategyContext } from 'src/components/MakeStrategyContext/StrategyContext'
 const StyledApp = styled.div`
   // Your style here
 `;
 
 export function App() {
+  // const [state, dispatch] = React.useReducer(mainReducer, initialState);
   return (
     <StyledApp>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" Component={SignIn} />
-          <Route path="/signup" Component={SignUp} />
-        </Routes>
-        {/* <LeftTabsExample></LeftTabsExample> */}
+      {/* <StrategyContext.Provider value={{ state, dispatch }}> */}
+
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" Component={SignIn} />
+            <Route path="/signup" Component={SignUp} />
+          </Routes>
+          {/* <LeftTabsExample></LeftTabsExample> */}
 
 
-        <Routes>
-          <Route path="/backtest" element={<><StackedExample />
-            <SingleBacktest /></>} />
-          <Route path="/backtest" element={<><StackedExample /><Backtest /></>} />
-          <Route path="/makestrategy" element={<><StackedExample /><MakeStrategy /></>} />
-        </Routes>
-      </BrowserRouter>
-      {/* <Dndpage></Dndpage> */}
-      {/* <NxWelcome title="tradingfrontend" /> */}
+          <Routes>
+            <Route path="/Singlebacktest" element={<><StackedExample />
+              <SingleBacktest /></>} />
+            <Route path="/backtest" element={<><StackedExample /><Backtest /></>} />
+            <Route path="/makestrategy" element={<><StackedExample /><MakeStrategy /></>} />
+          </Routes>
+        </BrowserRouter>
+        {/* <Dndpage></Dndpage> */}
+        {/* <NxWelcome title="tradingfrontend" /> */}
+      {/* </StrategyContext.Provider> */}
+
     </StyledApp>
   );
 }

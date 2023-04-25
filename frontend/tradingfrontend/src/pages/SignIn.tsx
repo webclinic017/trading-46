@@ -223,20 +223,21 @@ export default function SignInSide() {
                                 >
                                     登入
                                 </Button>
-                                <GoogleLogin
+                                {/* <GoogleLogin
                                     width='100%'
                                     onSuccess={credentialResponse => {
                                         console.log(credentialResponse);
+
                                     }}
                                     onError={() => {
                                         console.log('Login Failed');
                                     }}
-                                />
-                                <Button onClick={() => {
+                                /> */}
+                                {/* <Button onClick={() => {
                                     googleLogout();
                                 }}>
                                     google logout
-                                </Button>
+                                </Button> */}
                                 <Grid container>
                                     <Grid item xs>
                                         <NavLink

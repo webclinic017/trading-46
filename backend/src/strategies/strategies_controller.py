@@ -50,12 +50,14 @@ strategies_router = APIRouter(
 )
 
 @strategies_router.post("/add_strategy")
-async def add_strategy(strategy_id: str, strategy_name: str, strategy_description: str, strategy_code: str, strategy_type: str, strategy_parameters: str, strategy_author: str, strategy_status: str, current_user: User = Depends(get_current_active_user)):
+async def add_strategy(strategy:Strategy ,current_user: User = Depends(get_current_active_user)):
     # if not RoleService.checkPermission(current_user, Permission.Backtest):
     #     raise HTTPException(status_code=403, detail="Permission denied")
     try:
         strategy_author = current_user.email
-        strategy = await StrategiesService.add_strategy(strategy_id, strategy_name, strategy_description, strategy_code, strategy_type, strategy_parameters, strategy_author, strategy_status)
+        strategy.strategy_author = strategy_author
+        logger.info(strategy)
+        strategy = await StrategiesService.add_strategy(strategy)
         return strategy
     except Exception as e:
         logger.error(e)

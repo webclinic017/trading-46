@@ -31,21 +31,14 @@ import os
 
 
 class StrategiesService():
-    async def add_strategy(strategy_id, strategy_name, strategy_description, strategy_code, strategy_type, strategy_parameters, strategy_author, strategy_status ):
-        strategy = Strategy(
-            strategy_id = strategy_id,
-            strategy_name = strategy_name,
-            strategy_description = strategy_description,
-            strategy_code = strategy_code,
-            strategy_type = strategy_type,
-            strategy_parameters = strategy_parameters,
-            strategy_author = strategy_author,
-            strategy_status = strategy_status
-        )
-
+    async def add_strategy(strategy):
         await MongoEngine.getEngine().save(strategy)
         return {"message": "Add strategy successfully"}
     async def findStrategyById(id: ObjectId):
         logger.info("findStrategyById", id)
         strategy = await MongoEngine.getEngine().find_one(Strategy, Strategy.id == ObjectId(id))
+        return strategy
+    async def findStrategyByAuthor(author: str):
+        logger.info("findStrategyByAuthor", author)
+        strategy = await MongoEngine.getEngine().find(Strategy, Strategy.author == author)
         return strategy

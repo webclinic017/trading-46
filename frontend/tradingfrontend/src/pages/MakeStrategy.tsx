@@ -8,6 +8,7 @@ import { useRef, useEffect, useState } from 'react';
 import MakeStrategyBoard from 'src/components/MakeStrategyBoard';
 import { SortableItem } from './SortableItemS';
 import Container from 'react-bootstrap/Container';
+import Stack from '@mui/material/Stack';
 import BoardSectionList from 'src/components/dndComponents/BoardSectionList';
 import {
     DndContext,
@@ -37,7 +38,7 @@ export default function MakeStrategy() {
         const { active, over } = event;
         console.log("ACTIVE: " + active.id);
         console.log("OVER :" + over.id);
-    
+
         if (active.id !== over.id) {
             setLanguages((items) => {
                 const activeIndex = items.indexOf(active.id);
@@ -47,7 +48,7 @@ export default function MakeStrategy() {
                 // items: [2, 3, 1]   0  -> 2
                 // [1, 2, 3] oldIndex: 0 newIndex: 2  -> [2, 3, 1] 
             });
-    
+
         }
     }
     //     <DndContext
@@ -68,20 +69,20 @@ export default function MakeStrategy() {
     return (
         <Box sx={{ flexGrow: 1, position: 'absolute', right: "12px", top: '64px', left: leftPixel }}>
             <Grid container spacing={2}>
-                <Grid item xs={12} md={8} xl={8} lg={8}>
-                    <Item>
-                        <MakeStrategyBoard />
-                    </Item>
+                <Grid item xs={12} md={6}>
+                    <Stack spacing={2} direction="column">
+                        <Item>
+                            回測名稱
+                        </Item>
+                        <Item>
+                            <MakeStrategyBoard />
+                        </Item>
+                    </Stack>
+                    {/* <Item>xs=6 md=4</Item> */}
                 </Grid>
-                <Grid item xs={12} md={4} xl={4} lg={4}>
+                <Grid item xs={6} md={6} xl={6} lg={6}>
                     <Item>xs=6 md=4 </Item>
                     {/* <BoardSectionList /> */}
-                </Grid>
-                <Grid item xs={6} md={6}>
-                    <Item>xs=6 md=4</Item>
-                </Grid>
-                <Grid item xs={6} md={6}>
-                    <Item>xs=6 md=8</Item>
                 </Grid>
             </Grid>
         </Box>
