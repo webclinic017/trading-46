@@ -1,5 +1,5 @@
 name: deploy
-on: 
+on:
   push:
     branches: [main]
   pull_request:
@@ -21,4 +21,7 @@ jobs:
         run: sudo docker compose build
       - name: deploy
         working-directory: ./backend
-        run: sudo docker compose up 
+        run: sudo docker compose up
+      - name: deploy static server
+        working-directory: ./staticfilesserver
+        run: sudo docker compose up

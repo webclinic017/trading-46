@@ -20,12 +20,12 @@ function StackedExample() {
     
     return (
         <Layout >
-            <Navbar className="main-header" expand={false} bg={theme} variant={theme} style={{zIndex:"10"}}>
+            <Navbar className="main-header"  expand={false} bg={theme} variant={theme} style={{zIndex:"10"}}>
             <Container fluid>
             <Navbar.Brand href="#home">單一個股回測</Navbar.Brand>
             </Container>
         </Navbar>
-        <Sidebar variant={theme} bg={theme} expand={false} style={{zIndex:"10"}}>
+        <Sidebar variant={theme} defaultExpanded={false} bg={theme} expand={false} style={{zIndex:"10"}}>
             <Sidebar.Collapse>
             <Sidebar.Header>
                 <Sidebar.Brand>Cool Backtesting</Sidebar.Brand>
