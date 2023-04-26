@@ -13,7 +13,7 @@ import TreeView from '@mui/lab/TreeView';
 import TreeItem from '@mui/lab/TreeItem';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ConditionAddList from './ConditionAddList';
-import { useState,useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -22,6 +22,9 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import NativeSelect from '@mui/material/NativeSelect';
 import InputLabel from '@mui/material/InputLabel';
 import axios from 'axios';
+import { StrategyContext } from './MakeStrategyContext/StrategyContext';
+import { Types } from './MakeStrategyContext/StategyReducers';
+import { v4 as uuidv4 } from 'uuid';
 
 function ControlledTreeView(props: any) {
     const [expanded, setExpanded] = React.useState<string[]>([]);
@@ -72,14 +75,14 @@ function ControlledTreeView(props: any) {
             >
                 <TreeItem nodeId="1" label="技術指標">
                     <TreeItem nodeId="均線" label="均線" >
-                            <TreeItem nodeId="5日均線" label="5日均線" />
-                            <TreeItem nodeId="10日均線" label="10日均線" />
-                            <TreeItem nodeId="15日均線" label="15日均線" />
-                            <TreeItem nodeId="20日均線" label="20日均線" />
-                            <TreeItem nodeId="25日均線" label="25日均線" />
-                            <TreeItem nodeId="30日均線" label="30日均線" />
-                            <TreeItem nodeId="60日均線" label="60日均線" />
-                            <TreeItem nodeId="120日均線" label="120日均線" />
+                        <TreeItem nodeId="5日均線" label="5日均線" />
+                        <TreeItem nodeId="10日均線" label="10日均線" />
+                        <TreeItem nodeId="15日均線" label="15日均線" />
+                        <TreeItem nodeId="20日均線" label="20日均線" />
+                        <TreeItem nodeId="25日均線" label="25日均線" />
+                        <TreeItem nodeId="30日均線" label="30日均線" />
+                        <TreeItem nodeId="60日均線" label="60日均線" />
+                        <TreeItem nodeId="120日均線" label="120日均線" />
 
                     </TreeItem>
                     <TreeItem nodeId="收盤價" label="收盤價" />
@@ -115,22 +118,28 @@ function ConditionBoard(props) {
 
     return (
         <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-        {/* <Stack direction="row" spacing={1}  > */}
+            {/* <Stack direction="row" spacing={1}  > */}
             {props.displayChips.map((chip) => (
                 <Chip
                     label={chip}
                     onClick={handleClick}
-                    onDelete={()=>{handleDelete(chip)}}
-    
-                    // deleteIcon={<AddCircleIcon />}
+                    onDelete={() => { handleDelete(chip) }}
+
+                // deleteIcon={<AddCircleIcon />}
                 />
             ))
             }
-        {/* </Stack> */}
+            {/* </Stack> */}
         </Box>
     );
 }
 export default function MakeStrategyBoard() {
+    
+    const { state, dispatch } = React.useContext(StrategyContext);
+
+    console.log(state, 'state')
+    
+
     const [SingleBacktest, setSingleBacktest] = React.useState([]);
     const handleSingleBacktest = (data) => {
         setSingleBacktest(data)
@@ -150,7 +159,7 @@ export default function MakeStrategyBoard() {
 
 
 
-    
+
     //以下為暫時用來測試的資料
     async function login(username, password) {
         const data = {
@@ -200,7 +209,7 @@ export default function MakeStrategyBoard() {
         const config = {
             headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
         };
-        
+
         await axios.post('http://localhost:8050/api/v1/backtest/single_backtesting_with_custom_strategy', data, config).then(response => {
             console.log(response.data);
             setResponse(response.data.date);
@@ -213,43 +222,179 @@ export default function MakeStrategyBoard() {
     let backtest_str = `http://localhost:4041/htmlplots/test01@example.com_asd_${all_data.stock_symbol}.html`;
     console.log(backtest_str)
 
-
+    const useContextConsole = () => {
+        dispatch({ type: Types.Create, payload: {
+            strategy_id: uuidv4(),
+            strategy_name: 'test',
+            strategy_description: 'test',
+            strategy_code: 'test',
+            strategy_type: 'test',
+            strategy_parameters:  'test',
+            strategy_author: 'test',
+            strategy_status: 'test',
+            strategy_created_date: 'test',
+            strategy_updated_date: 'test',
+        } })
+        dispatch({ type: Types.CreateBacktest, payload: {
+            backtest_id: uuidv4(),
+            backtest_name: 'test',
+            backtest_description: {
+                stock_symbol: all_data.stock_symbol,
+                stock_name: 'test',
+                start_date: all_data.start_date,
+                end_date: all_data.end_date,
+                strategy_name: 'test',
+                commission: all_data.commission,
+                cash: all_data.cash
+            },
+            backtest_code: 'test',
+            backtest_type: 'test',
+            backtest_parameters:  'test',
+            backtest_author: 'test',
+            backtest_html: backtest_str,
+            backtest_status: 'test',
+            backtest_created_date: 'test',
+            backtest_updated_date: 'test',
+        } })
+        console.log(state, 'state')
+    }
     return (
-        <>
-            <Stack direction="row" sx={{width:'100%'}} >
+
+        <Box sx={{ width: '100%' }}>
+            <Stack direction="row" sx={{ width: '100%' }} >
                 <Stack direction="column" spacing={1} >
-                <Box  >
-                    <Typography component="div" variant="h10">
-                        自訂指標
-                    </Typography>
-                    <ConditionBoard displayChips={selectedFactors} handleDeleteSelectedFactors={handleDeleteSelectedFactors} />
-                </Box>
-                <Box >
-                    <Typography component="div" variant="h10">
-                        指標條件
-                    </Typography>
-                    {/* <Button >
+                    <Box  >
+                        <Typography component="div" variant="h10">
+                            自訂指標
+                        </Typography>
+                        <ConditionBoard displayChips={selectedFactors} handleDeleteSelectedFactors={handleDeleteSelectedFactors} />
+                    </Box>
+                    <Box >
+                        <Typography component="div" variant="h10">
+                            指標條件
+                        </Typography>
+                        {/* <Button >
                         新增買進賣出條件
                 </Button> */}
-                <Stack direction="column" spacing={1} >
-                    <Box style={{width:'100%'}} >
-                        {/* <Typography component="div" variant="h10">
+                        <Stack direction="column" spacing={1} >
+                            <Box style={{ width: '100%' }} >
+                                {/* <Typography component="div" variant="h10">
                             買賣條件
                         </Typography> */}
-                        <ConditionAddList selectedFactors={selectedFactors} handleSingleBacktest={handleSingleBacktest} />
-                    </Box>
-                    <Box style={{width:'100%'}} >
+                                <ConditionAddList selectedFactors={selectedFactors} handleSingleBacktest={handleSingleBacktest} />
+                            </Box>
+                            {/* <Box style={{width:'100%'}} >
                         <Typography component="div" variant="h10">
                             條件順序拖動
                         </Typography>
+                    </Box> */}
+                        </Stack>
                     </Box>
-                </Stack>
-                </Box>
-                
+                    <Card sx={{ display: 'flex' }}>
+                        <Typography component="div" sx={{ display: 'flex', flexDirection: 'column' }}>
+
+                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                <Stack direction="row" spacing={1} >
+                                <TextField
+                                    id="outlined-multiline-flexible"
+                                    label="stock_symbol"
+                                    multiline
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    value={all_data.stock_symbol}
+                                    onChange={(e) => setAll_data({ ...all_data, stock_symbol: e.target.value })}
+                                >
+                                </TextField>
+                                <TextField
+                                    id="outlined-multiline-flexible"
+                                    label="strategy_id"
+                                    multiline
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    value={all_data.strategy_id}
+                                    onChange={(e) => setAll_data({ ...all_data, strategy_id: e.target.value })}
+                                >
+                                </TextField>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <FormControl fullWidth>
+                                        <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                                            plot
+                                        </InputLabel>
+                                        <NativeSelect
+                                            defaultValue={30}
+                                            inputProps={{
+                                                name: 'age',
+                                                id: 'uncontrolled-native',
+                                            }}
+                                            onChange={(e) => setAll_data({ ...all_data, plot: e.target.value })}
+                                        >
+                                            <option value={'true'}>True</option>
+                                            <option value={'false'}>False</option>
+                                        </NativeSelect>
+                                    </FormControl>
+                                </Box>
+                                </Stack>
+                                <Stack direction="row" spacing={1} >
+                                <TextField
+                                    id="outlined-multiline-flexible"
+                                    label="start_date"
+                                    multiline
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    value={all_data.start_date}
+                                    onChange={(e) => setAll_data({ ...all_data, start_date: e.target.value })}
+                                >
+                                </TextField>
+                                <TextField
+                                    id="outlined-multiline-flexible"
+                                    label="end_date"
+                                    multiline
+                                    value={all_data.end_date}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    onChange={(e) => setAll_data({ ...all_data, end_date: e.target.value })}
+                                >
+                                </TextField>
+                                <TextField
+                                    id="outlined-multiline-flexible"
+                                    label="cash"
+                                    multiline
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    value={all_data.cash}
+                                    onChange={(e) => setAll_data({ ...all_data, cash: e.target.value })}
+                                >
+                                </TextField>
+                                <TextField
+                                    id="outlined-multiline-flexible"
+                                    label="commission"
+                                    multiline
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    value={all_data.commission}
+                                    onChange={(e) => setAll_data({ ...all_data, commission: e.target.value })}
+                                >
+                                </TextField>
+                                </Stack>
+                                {response}
+                                {/* <iframe title="cool" src={backtest_str} width="700px" height="500px"></iframe> */}
+                            </Box>
+                            <Button onClick={useContextConsole} >
+                                單策略回測
+                            </Button>
+                        </Typography>
+                    </Card>
                 </Stack>
                 <Box style={{ width: "50%" }}>
                     <ControlledTreeView handleSelectedFactors={handleSelectedFactors} />
                 </Box>
+
             </Stack>
             {/* <Box sx={{ mb: 1 }}>
                 <Button >
@@ -259,135 +404,10 @@ export default function MakeStrategyBoard() {
                     及時回測
                 </Button>
             </Box> */}
-        </>
+        </Box>
+
 
     )
 
 
 }
-{/* <Card sx={{ display: 'flex' }}>
-                <Typography component="div" sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <CardContent sx={{ flex: '1 0 auto' }}>
-                        <Typography component="div" variant="h5">
-                            Single Back Test
-                        </Typography>
-                        <Typography variant="subtitle1" color="text.secondary" component="div">
-                            Oscar Yuh
-                        </Typography>
-                    </CardContent>
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <TextField
-                            id="outlined-multiline-flexible"
-                            label="stock_symbol"
-                            multiline
-                            InputLabelProps={{
-                                shrink: true,
-                              }}
-                            value={all_data.stock_symbol}
-                            onChange={(e) => setAll_data({ ...all_data, stock_symbol: e.target.value })}
-                        >
-                        </TextField>
-                        <TextField
-                            id="outlined-multiline-flexible"
-                            label="strategy_id"
-                            multiline
-                            InputLabelProps={{
-                                shrink: true,
-                              }}
-                            value={all_data.strategy_id}
-                            onChange={(e) => setAll_data({ ...all_data, strategy_id: e.target.value })}
-                        >
-                        </TextField>
-                        <TextField
-                            id="outlined-multiline-flexible"
-                            label="buy_strategy"
-                            multiline
-                            value={all_data.buy_strategy}
-                            maxRows={4}
-                            InputLabelProps={{
-                                shrink: true,
-                              }}
-                            onChange={(e) => setAll_data({ ...all_data, buy_strategy: e.target.value })}
-                            >
-                            
-                        </TextField>
-                        <TextField
-                            id="outlined-multiline-flexible"
-                            label="sell_strategy"
-                            multiline
-                            value={all_data.sell_strategy}
-                            maxRows={4}
-                            InputLabelProps={{
-                                shrink: true,
-                              }}
-                            onChange={(e) => setAll_data({ ...all_data, sell_strategy: e.target.value })}
-                            >
-                        </TextField>
-                        <Box sx={{ minWidth: 120 }}>
-                            <FormControl fullWidth>
-                                <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                                    plot
-                                </InputLabel>
-                                <NativeSelect
-                                    defaultValue={30}
-                                    inputProps={{
-                                        name: 'age',
-                                        id: 'uncontrolled-native',
-                                    }}
-                                    onChange={(e) => setAll_data({ ...all_data, plot: e.target.value })}
-                                >
-                                    <option value={'true'}>True</option>
-                                    <option value={'false'}>False</option>
-                                </NativeSelect>
-                            </FormControl>
-                        </Box>
-                        <TextField
-                            id="outlined-multiline-flexible"
-                            label="start_date"
-                            multiline
-                            InputLabelProps={{
-                                shrink: true,
-                              }}
-                            value={all_data.start_date}
-                            onChange={(e) => setAll_data({ ...all_data, start_date: e.target.value })}
-                        >
-                        </TextField>
-                        <TextField
-                            id="outlined-multiline-flexible"
-                            label="end_date"
-                            multiline
-                            value={all_data.end_date}
-                            InputLabelProps={{
-                                shrink: true,
-                              }}
-                            onChange={(e) => setAll_data({ ...all_data, end_date: e.target.value })}
-                        >
-                        </TextField>
-                        <TextField
-                            id="outlined-multiline-flexible"
-                            label="cash"
-                            multiline
-                            InputLabelProps={{
-                                shrink: true,
-                              }}
-                            value={all_data.cash}
-                            onChange={(e) => setAll_data({ ...all_data, cash: e.target.value })}
-                        >
-                        </TextField>
-                        <TextField
-                            id="outlined-multiline-flexible"
-                            label="commission"
-                            multiline
-                            InputLabelProps={{
-                                shrink: true,
-                              }}
-                            value={all_data.commission}
-                            onChange={(e) => setAll_data({ ...all_data, commission: e.target.value })}
-                        >
-                        </TextField>
-                        <Button variant="contained" onClick={()=>{single_test_with_custom_strategy()}}>Single Back Test</Button>
-                        {response}
-                        <iframe title= "cool" src= {backtest_str} width="700px" height="500px"></iframe>
-                    </Box>
-                </Typography>
-            </Card> */}

@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  api:
+  backtest-api:
     build: ./
     ports:
       - 8050:80
@@ -12,7 +12,15 @@ services:
       MONGODB_HOST: mongodb
     networks:
       - backtest-network
-  mongodb:
+  backtest-ui:
+    build: ../frontend/tradingfrontend
+    links:
+      - backtest-api
+    ports:
+      - 8080:8080
+    networks:
+      - backtest-network
+  mongodb: 
     container_name: mongodb
     restart: always
     # command: [--auth]

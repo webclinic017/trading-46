@@ -9,10 +9,10 @@ class MongoEngine:
 
     MONGO_USERNAME = 'oscar'
     MONGO_PASSWORD = '12345678'
-    # MONGO_HOST = 'mongodb'
-    # MONGO_PORT = 27017
-    MONGO_HOST = 'localhost'
-    MONGO_PORT = 27018
+    MONGO_HOST = 'mongodb'
+    MONGO_PORT = 27017
+    # MONGO_HOST = 'localhost'
+    # MONGO_PORT = 27018
 
 
     # MONGO_AUTHSOURCE = 'admin'

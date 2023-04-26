@@ -32,8 +32,8 @@ import os
 
 def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start_date="2022-01-01", end_date=None, cash=1000000, commission=0.001425, username=""):
     pd_data = pd.read_csv(
-        # '../csvdata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
-        'D:/studyplace/python_stock/quantitativetrading/trading/Alldata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
+        '../csvdata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
+        # 'D:/studyplace/python_stock/quantitativetrading/trading/Alldata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
 
     # 將資料轉換成talib可以使用的格式
     pd_data2 = pd_data.rename(
@@ -71,6 +71,8 @@ def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start
     sell_script_and_sell_pct = ""
     buy_indent = "            "
     sell_indent = "            "
+    if strategy.take_profit != None:
+        take_profit = strategy.take_profit
     for buy_script in strategy.strategy_code.buy_signal:
         if buy_script[0] == "standard":
             if buy_script[1] == "and":                    
@@ -97,7 +99,7 @@ def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start
         next_strategy_string = sell_script_and_string + sell_script_or_string + buy_script_and_string + buy_scipt_or_string
 
     
-    custom_strategy = f"""\nimport backtesting\nclass CustomStrategy2(backtesting.Strategy):
+    custom_strategy = f"""\nimport backtesting\nclass CustomStrategy(backtesting.Strategy):
         def init(self):
             super().init()
             price = self.data.Close
@@ -118,7 +120,7 @@ def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start
     #if backtesting.lib.crossover(self.ma10, self.ma20): self.buy()ChangeLine                elif backtesting.lib.crossover(self.ma20, self.ma10): self.sell()
     # logger.info(custom_strategy)
     exec(custom_strategy, custom_strategy_vars)
-    strategy = custom_strategy_vars['CustomStrategy2']
+    strategy = custom_strategy_vars['CustomStrategy']
     # logger.info(custom_strategy_vars['CustomStrategy2'])
     # data = pd.read_csv(
     #     'Alldata/1336_change.csv', index_col=0, parse_dates=True)
@@ -126,13 +128,11 @@ def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start
     bt = Backtest(data, strategy, commission=commission, cash=cash,
                 exclusive_orders=True)
     stats = bt.run()
+    logger.info(stats)
     if plot:
-        if os.path.isfile('../../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol)):
-            os.remove('../../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol))
-        bt.plot(filename='../../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)      
-        # if os.path.isfile('../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol)):
-        #     os.remove('../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol))
-        # bt.plot(filename='../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
+        if os.path.isfile('../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol)):
+            os.remove('../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol))
+        bt.plot(filename='../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
     # bt.plot()
     # print((stats))
     # logger.info(stats.to_dict())

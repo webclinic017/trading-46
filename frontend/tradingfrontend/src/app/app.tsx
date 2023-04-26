@@ -13,15 +13,24 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "src/scss/styles.scss";
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { StrategyContext } from 'src/components/MakeStrategyContext/StrategyContext'
+import { StrategysReducer,SingleBacktestReducer } from 'src/components/MakeStrategyContext/StategyReducers';
 const StyledApp = styled.div`
   // Your style here
 `;
 
 export function App() {
-  // const [state, dispatch] = React.useReducer(mainReducer, initialState);
+  const initialState = {
+    StategyTasks: [],
+    SingleBacktest: []
+  };
+  const mainReducer = ({ StategyTasks, SingleBacktest }, action) => ({
+    StategyTasks: StrategysReducer(StategyTasks, action),
+    SingleBacktest: SingleBacktestReducer(SingleBacktest, action)
+  });
+  const [state, dispatch] = React.useReducer(mainReducer, initialState);
   return (
     <StyledApp>
-      {/* <StrategyContext.Provider value={{ state, dispatch }}> */}
+      <StrategyContext.Provider value={{ state, dispatch }}>
 
         <BrowserRouter>
           <Routes>
@@ -40,7 +49,7 @@ export function App() {
         </BrowserRouter>
         {/* <Dndpage></Dndpage> */}
         {/* <NxWelcome title="tradingfrontend" /> */}
-      {/* </StrategyContext.Provider> */}
+      </StrategyContext.Provider>
 
     </StyledApp>
   );

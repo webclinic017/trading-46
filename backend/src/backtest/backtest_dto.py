@@ -22,6 +22,7 @@ class SingleBacktest(Model):
     backtest_parameters: str = Field(...)
     backtest_author: str = Field(...)
     backtest_status: str = Field(...)
+    backtest_html: str = Field(...)
     backtest_created_date: datetime = Field(default_factory=datetime.now)
     backtest_updated_date: datetime = Field(default_factory=datetime.now)
 

@@ -20,12 +20,12 @@ function StackedExample() {
     
     return (
         <Layout >
-            <Navbar className="main-header" expand="sm" bg={theme} variant={theme} style={{zIndex:"10"}}>
+            <Navbar className="main-header" expand={false} bg={theme} variant={theme} style={{zIndex:"10"}}>
             <Container fluid>
-            <Navbar.Brand href="#home">Brand link</Navbar.Brand>
+            <Navbar.Brand href="#home">單一個股回測</Navbar.Brand>
             </Container>
         </Navbar>
-        <Sidebar variant={theme} bg={theme} expand="sm" style={{zIndex:"10"}}>
+        <Sidebar variant={theme} bg={theme} expand={false} style={{zIndex:"10"}}>
             <Sidebar.Collapse>
             <Sidebar.Header>
                 <Sidebar.Brand>Cool Backtesting</Sidebar.Brand>
@@ -37,7 +37,7 @@ function StackedExample() {
                     <Sidebar.Nav.Icon>1</Sidebar.Nav.Icon>
                     <Sidebar.Nav.Title>自訂義策略</Sidebar.Nav.Title>
                 </Sidebar.Nav.Link>
-                <Sidebar.Nav.Link onSelect={()=>{navigateTo('/')}} eventKey="multipleBacktest">
+                {/* <Sidebar.Nav.Link onSelect={()=>{navigateTo('/')}} eventKey="multipleBacktest">
                     <Sidebar.Nav.Icon>2</Sidebar.Nav.Icon>
                     <Sidebar.Nav.Title>多股回測</Sidebar.Nav.Title>
                 </Sidebar.Nav.Link>
@@ -52,14 +52,14 @@ function StackedExample() {
                     </Sidebar.Sub.Toggle>
                     <Sidebar.Sub.Collapse>
                     <Sidebar.Nav>
-                        {/* linkl to another page */}
+                        linkl to another page
                         <Sidebar.Nav.Link onSelect={()=>{navigateTo('/backtest')}}eventKey="sum_menu_title">
                         <Sidebar.Nav.Icon>1.1</Sidebar.Nav.Icon>
                         <Sidebar.Nav.Title>Sub menu item</Sidebar.Nav.Title>
                         </Sidebar.Nav.Link>
                     </Sidebar.Nav>
                     </Sidebar.Sub.Collapse>
-                </Sidebar.Sub>
+                </Sidebar.Sub> */}
                 </Sidebar.Nav>
             </Sidebar.Body>
             </Sidebar.Collapse>

@@ -3,13 +3,15 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useContext } from 'react';
 import MakeStrategyBoard from 'src/components/MakeStrategyBoard';
 import { SortableItem } from './SortableItemS';
 import Container from 'react-bootstrap/Container';
 import Stack from '@mui/material/Stack';
 import BoardSectionList from 'src/components/dndComponents/BoardSectionList';
+import DisplayBacktestingHtml from 'src/components/MakeStrategyComponents/DisplayBacktestingHtml';
 import {
     DndContext,
     closestCenter
@@ -19,6 +21,9 @@ import {
     SortableContext,
     verticalListSortingStrategy
 } from "@dnd-kit/sortable";
+
+
+
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -30,6 +35,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 export default function MakeStrategy() {
+
     const windowSize = useRef([window.innerWidth, window.innerHeight]);
     let leftPixel = windowSize.current[0] > 1440 ? '312px' : '84px'
     const [languages, setLanguages] = useState(["JavaScript", "Python", "TypeScript"]);
@@ -69,19 +75,21 @@ export default function MakeStrategy() {
     return (
         <Box sx={{ flexGrow: 1, position: 'absolute', right: "12px", top: '64px', left: leftPixel }}>
             <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={6} md={6}>
                     <Stack spacing={2} direction="column">
                         <Item>
-                            回測名稱
+                            單一個股回測
                         </Item>
                         <Item>
                             <MakeStrategyBoard />
                         </Item>
                     </Stack>
-                    {/* <Item>xs=6 md=4</Item> */}
+
                 </Grid>
                 <Grid item xs={6} md={6} xl={6} lg={6}>
-                    <Item>xs=6 md=4 </Item>
+                    <Item style={{minHeight:'500px'}}>
+                        <DisplayBacktestingHtml />
+                    </Item>
                     {/* <BoardSectionList /> */}
                 </Grid>
             </Grid>

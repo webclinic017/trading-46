@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -15,6 +15,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import NativeSelect from '@mui/material/NativeSelect';
 import { Button } from '@mui/material';
+import { StrategyContext } from 'src/components/MakeStrategyContext/StrategyContext';
 
 
 export default function Backtest() {
@@ -75,6 +76,11 @@ export default function Backtest() {
         ).catch(error => {
             console.log(error);
         });
+    }
+    const { state, dispatch } = useContext(StrategyContext);
+
+    const ConsolelogState = () => {
+        console.log(state);
     }
     // http://localhost:4041/htmlplots/test01@example.com_asd_2330.html
     let backtest_str = `http://localhost:4041/htmlplots/test01@example.com_asd_${all_data.stock_symbol}.html`;
@@ -202,11 +208,13 @@ export default function Backtest() {
                         >
                         </TextField>
                         <Button variant="contained" onClick={()=>{single_test_with_custom_strategy()}}>Single Back Test</Button>
+                        <Button variant="contained" onClick={ConsolelogState}>測試context</Button>
                         {response}
                         <iframe title= "cool" src= {backtest_str} width="700px" height="500px"></iframe>
                     </Box>
                 </Typography>
             </Card>
+
         </div>
     );
 }
