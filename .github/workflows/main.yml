@@ -11,11 +11,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: stop container
+        working-directory: ./backend
         run: sudo docker compose rm -f -s -v
       - name: remove
+        working-directory: ./backend
         run: sudo docker image prune -a -f
       - name: build
         working-directory: ./backend
         run: sudo docker compose build
       - name: deploy
+        working-directory: ./backend
         run: sudo docker compose up 
