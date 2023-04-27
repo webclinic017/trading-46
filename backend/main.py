@@ -14,6 +14,8 @@ import os
 from dotenv import load_dotenv
 from multiprocessing import Pool
 
+load_dotenv()
+# load_dotenv(dotenv_path="./productionEnv/.env")
 
 from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
@@ -57,7 +59,8 @@ import json, time
 
 
 
-load_dotenv()
+
+
 
 
 

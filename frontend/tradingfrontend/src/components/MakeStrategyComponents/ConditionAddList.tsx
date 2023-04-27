@@ -11,55 +11,61 @@ import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
+import { StrategyContext } from '../MakeStrategyContext/StrategyContext';
+import {
+  Types,
+  BacktestTypes,
+  StrategyTypes,
+} from '../MakeStrategyContext/StategyReducers';
 export default function ConditionAddList(props: any) {
   function IndividualIndicators(props: any) {
+    // id: uuidv4(),
+    // category:"standard",
+    // type:'live',
+    // indicator_1 :'id1',
+    // compare_operator:'>',
+    // indicator_2 :'id2',
+    // buyOrSell:'buy',
+    // amount:0,
+    // unit:'percent',
+    const { state, dispatch } = React.useContext(StrategyContext);
+
+
     const [comparsionOperator, setComparsionOperator] = React.useState(
-      props.indicatorList[props.index][1]
+      props.indicator?.compare_operator
     );
-    const [selectedIindicator, setSelectedIindicator] = React.useState(
-      props.indicatorList[props.index][2]
+    const [selectedIindicator1, setSelectedIindicator1] = React.useState(
+      props.indicator?.indicator_1
+    );
+    const [selectedIindicator2, setSelectedIindicator2] = React.useState(
+      props.indicator?.indicator_2
     );
     const [buyOrSell, setBuyOrSell] = React.useState(
-      props.indicatorList[props.index][3]
+      props.indicator?.buyOrSell
     );
     const [buySellAmount, setBuySellAmount] = React.useState(
-      props.indicatorList[props.index][4]
+      props.indicator?.amount
     );
     const [compareMode, setCompareMode] = React.useState(true);
     const handleOperatorChange = (event: SelectChangeEvent) => {
       console.log(event.target.value);
       setComparsionOperator(event.target.value);
-      props.updateIndicatorList(
-        props.index,
-        props.indicator[0],
-        event.target.value,
-        selectedIindicator
-      );
       console.log(comparsionOperator);
     };
-    const handleIindicatorChange = (event: SelectChangeEvent) => {
+    const handleIindicator1Change = (event: SelectChangeEvent) => {
       console.log(event.target.value, 'selectedIindicator');
-      setSelectedIindicator(event.target.value);
+      setSelectedIindicator1(event.target.value);
       console.log(selectedIindicator, 'selectedIindicator');
-      props.updateIndicatorList(
-        props.index,
-        props.indicator[0],
-        comparsionOperator,
-        event.target.value
-      );
+    };
+    const handleIindicator2Change = (event: SelectChangeEvent) => {
+      console.log(event.target.value, 'selectedIindicator');
+      setSelectedIindicator2(event.target.value);
+      console.log(selectedIindicator, 'selectedIindicator');
     };
     const handleBuyOrSellChange = (event: SelectChangeEvent) => {
       console.log(event.target.value, 'BuyOrSellChange');
       setBuyOrSell(event.target.value);
       console.log(buyOrSell, 'BuyOrSellChange');
-      props.updateIndicatorList(
-        props.index,
-        props.indicator[0],
-        comparsionOperator,
-        selectedIindicator,
-        event.target.value,
-        buySellAmount
-      );
     };
     const handleBuySellAmountChange = (event: SelectChangeEvent) => {
       console.log(event.target.value, 'BuySellAmountChange');
@@ -69,14 +75,6 @@ export default function ConditionAddList(props: any) {
     };
     const handleCompareMode = () => {
       setCompareMode(!compareMode);
-    };
-    const handleChangeIndicatorList = () => {
-      props.updateIndicatorList(
-        props.index,
-        props.indicator[0],
-        comparsionOperator,
-        selectedIindicator
-      );
     };
     const handleChange = (event: SelectChangeEvent) => {
       setAge(event.target.value as string);
@@ -89,16 +87,35 @@ export default function ConditionAddList(props: any) {
       console.log(props?.index);
       removeIindicatorList(props.index);
     };
+    // const handleSendUpdatedBuyCondition = () => {
+    //   dispatch({
+    //     Type: StrategyTypes.UPDATE_BUY_INDICATOR
+    //     paylaod: {
+    //       id: props.index,
+    //       cate
+    //   })
     return (
       <Box sx={{ minWidth: 120 }}>
         <Stack direction="row" spacing={1}>
           <Button variant="contained" onClick={handleCompareMode}>
             切換
           </Button>
-          <Typography component="div" variant="h10">
-            {props?.indicator[0]}
-          </Typography>
-          <FormControl fullWidth>
+          <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id="demo-simple-select-label">初始指標</InputLabel>
+            <Select
+              autoWidth
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={selectedIindicator1}
+              label="Age"
+              onChange={handleIindicator1Change}
+            >
+              {/* {props.selectedFactors.map((factor) => {
+                  return <MenuItem value={factor}>{factor}</MenuItem>;
+                })} */}
+            </Select>
+          </FormControl>
+          <FormControl sx={{ m: 1, minWidth: 50 }} fullWidth>
             <InputLabel id="demo-simple-select-label">比較運算</InputLabel>
             <Select
               autoWidth
@@ -122,30 +139,31 @@ export default function ConditionAddList(props: any) {
                 autoWidth
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={selectedIindicator}
+                value={selectedIindicator2}
                 label="Age"
-                onChange={handleIindicatorChange}
+                onChange={handleIindicator2Change}
               >
-                {props.selectedFactors.map((factor) => {
+                {/* {props.selectedFactors.map((factor) => {
                   return <MenuItem value={factor}>{factor}</MenuItem>;
-                })}
+                })} */}
               </Select>
             </FormControl>
           ) : (
             <TextField
+              sx={{ m: 1, minWidth: 120 }}
               InputLabelProps={{
                 shrink: true,
               }}
-              onChange={() => {
-                setSelectedIindicator();
+              onChange={(e) => {
+                handleIindicator2Change(e);
               }}
-              value={selectedIindicator}
+              value={selectedIindicator2}
               id="outlined-basic"
               label="數值"
               variant="outlined"
             />
           )}
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
+          {/* <FormControl sx={{ m: 1, minWidth: 120 }}>
             <InputLabel id="demo-simple-select-label">買或賣</InputLabel>
             <Select
               autoWidth
@@ -157,11 +175,11 @@ export default function ConditionAddList(props: any) {
             >
               <MenuItem value={'or'}>單一條件</MenuItem>
               <MenuItem value={'and'}>共同條件</MenuItem>
-              {/* <MenuItem value={"<="}>小於等於</MenuItem>
+              <MenuItem value={"<="}>小於等於</MenuItem>
                             <MenuItem value={">="}>大於等於</MenuItem>
-                            <MenuItem value={"=="}>等於</MenuItem> */}
+                            <MenuItem value={"=="}>等於</MenuItem>
             </Select>
-          </FormControl>
+          </FormControl> */}
           <TextField
             sx={{ m: 1, minWidth: 120 }}
             InputLabelProps={{
@@ -182,6 +200,7 @@ export default function ConditionAddList(props: any) {
       </Box>
     );
   }
+  const { state, dispatch } = React.useContext(StrategyContext);
   const [factor, setFactor] = React.useState('');
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [indicatorList, setIndicatorList] = React.useState([]);
@@ -243,50 +262,96 @@ export default function ConditionAddList(props: any) {
     setIndicatorList(newItems);
   }
   console.log(props.selectedFactors);
-
+  // {indicatorList.map((indicator, index) => (
+  //   <Box sx={{ width: '100%' }}>
+  //     <IndividualIndicators
+  //       indicatorList={indicatorList}
+  //       selectedFactors={props.selectedFactors}
+  //       indicator={indicator}
+  //       index={index}
+  //       removeIindicatorList={removeIindicatorList}
+  //       updateIndicatorList={updateIndicatorList}
+  //     />
+  //   </Box>
+  // ))}
   return (
     <div>
       <Box style={{ width: '100%' }}>
         <Stack direction="column" spacing={2}>
           <Box>
-            <Select
-              labelId="demo-controlled-open-select-label"
-              id="demo-controlled-open-select"
-              value={factor}
-              label="新增指標"
-              onChange={handleSetFactor}
-            >
-              {props.selectedFactors.length === 0 ? (
-                <MenuItem>請先新增指標</MenuItem>
-              ) : null}
-              {props.selectedFactors.map((factor) => (
-                <MenuItem value={factor}>{factor}</MenuItem>
-              ))}
-            </Select>
-            <Button
-              id="basic-button"
-              aria-controls={open ? 'basic-menu' : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-              onClick={handleAddIndicatorList}
-            >
-              新增買進賣出條件
-            </Button>
-          </Box>
-          <Box>
             <Stack direction="column" spacing={2}>
-              {indicatorList.map((indicator, index) => (
-                <Box sx={{ width: '100%' }}>
-                  <IndividualIndicators
-                    indicatorList={indicatorList}
-                    selectedFactors={props.selectedFactors}
-                    indicator={indicator}
-                    index={index}
-                    removeIindicatorList={removeIindicatorList}
-                    updateIndicatorList={updateIndicatorList}
-                  />
-                </Box>
-              ))}
+              <Box sx={{ width: '100%' }}>
+                <Typography variant="h6" gutterBottom component="div">
+                  符合全部條件
+                </Typography>
+                {state?.StategyTasks[0]?.strategy_code?.buy_signals.map((indicator, index) => {
+                  if (indicator.type === "and") {
+                    return (
+                      <Box sx={{ width: '100%' }} key={index}>
+                        <IndividualIndicators
+                          // indicatorList={indicatorList}
+                          // selectedFactors={props.selectedFactors}
+                          indicator={indicator}
+                          index={index}
+                        // removeIindicatorList={removeIindicatorList}
+                        // updateIndicatorList={updateIndicatorList}
+                        />
+                      </Box>
+                    );
+                  }
+                  // return null; // 如果不是 '買入'，返回 null，即不渲染任何元素
+                })}
+
+                <Stack direction="column" spacing={1}>
+                  {indicatorList.map((indicator, index) => (
+                    <Box sx={{ width: '100%' }}>
+                      <IndividualIndicators
+                        indicatorList={indicatorList}
+                        selectedFactors={props.selectedFactors}
+                        indicator={indicator}
+                        index={index}
+                        removeIindicatorList={removeIindicatorList}
+                        updateIndicatorList={updateIndicatorList}
+                      />
+                    </Box>
+                  ))}
+                </Stack>
+                <Typography variant="h6" gutterBottom component="div">
+                  符合部分條件
+                </Typography>
+                <Stack direction="column" spacing={1}>
+
+                  {indicatorList.map((indicator, index) => (
+                    <Box sx={{ width: '100%' }}>
+                      <IndividualIndicators
+                        indicatorList={indicatorList}
+                        selectedFactors={props.selectedFactors}
+                        indicator={indicator}
+                        index={index}
+                        removeIindicatorList={removeIindicatorList}
+                        updateIndicatorList={updateIndicatorList}
+                      />
+                    </Box>
+                  ))}
+                </Stack>
+                <Typography variant="h6" gutterBottom component="div">
+                  符合即時條件
+                </Typography>
+                <Stack direction="column" spacing={2}>
+                  {indicatorList.map((indicator, index) => (
+                    <Box sx={{ width: '100%' }}>
+                      <IndividualIndicators
+                        indicatorList={indicatorList}
+                        selectedFactors={props.selectedFactors}
+                        indicator={indicator}
+                        index={index}
+                        removeIindicatorList={removeIindicatorList}
+                        updateIndicatorList={updateIndicatorList}
+                      />
+                    </Box>
+                  ))}
+                </Stack>
+              </Box>
             </Stack>
           </Box>
         </Stack>

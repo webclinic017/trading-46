@@ -22,6 +22,9 @@ jobs:
       - name: deploy
         working-directory: ./backend
         run: sudo docker compose up
+      - name: build static server
+        working-directory: ./staticfilesserver
+        run: sudo docker compose build
       - name: deploy static server
         working-directory: ./staticfilesserver
         run: sudo docker compose up

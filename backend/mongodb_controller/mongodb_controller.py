@@ -3,16 +3,18 @@
 from pymongo import MongoClient
 from motor.motor_asyncio import AsyncIOMotorClient
 from odmantic import AIOEngine, ObjectId
-
-
+import os
+from main import logger
 class MongoEngine:
 
     MONGO_USERNAME = 'oscar'
     MONGO_PASSWORD = '12345678'
-    MONGO_HOST = 'mongodb'
-    MONGO_PORT = 27017
-    # MONGO_HOST = 'localhost'
-    # MONGO_PORT = 27018
+
+    MONGO_HOST = os.getenv('MONGO_HOST')
+    MONGO_PORT = os.getenv('MONGO_PORT')
+    logger.info(f"MONGO_HOST: {MONGO_HOST}")
+    logger.info(f"MONGO_PORT: {MONGO_PORT}")
+
 
 
     # MONGO_AUTHSOURCE = 'admin'

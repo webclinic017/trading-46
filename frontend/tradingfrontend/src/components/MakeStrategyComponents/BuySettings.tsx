@@ -40,6 +40,93 @@ function ControlledTreeView(props: any) {
   const [expanded, setExpanded] = React.useState<string[]>([]);
   const [selected, setSelected] = React.useState<string[]>([]);
 
+  let uuid =  state?.StategyTasks[0]?.strategy_id;
+  const handleCreatStrategyButton = () => {
+    dispatch({
+      type: Types.Create,
+      payload: {
+        strategy_id: uuid,
+        strategy_name: 'temp',
+        strategy_description: 'temp',
+        strategy_code: {
+          init_indicators: [],
+          stop_loss: 'temp',
+          take_profit: 'temp',
+          buy_first: 'temp',
+          buy_signals: [],
+          sell_signals: [],
+        },
+        Strategy_type: 'temp',
+        strategy_parameters: [],
+        strategy_author: 'temp',
+        strategy_status: 'temp',
+        strategy_created_date: 'temp',
+        strategy_updated_date: 'temp',
+      },
+    });
+    console.log(state);
+  };
+  const handleAddBuyAndIndicator = () => {
+    dispatch({
+      type: StrategyTypes.ADD_BUY_INDICATOR,
+      payload: {
+        strategy_id: uuid,        
+        buy_and_indicator: {
+          id: uuidv4(),
+          category:"standard",
+          type:'and',
+          indicator_1 :'id1',
+          compare_operator:'>',
+          indicator_2 :'id2',
+          buyOrSell:'buy',
+          amount:0,
+          unit:'percent',
+        }
+      },
+    });
+    console.log(state);
+  };
+  const handleAddBuyOrIndicator = () => {
+    dispatch({
+      type: StrategyTypes.ADD_BUY_INDICATOR,
+      payload: {
+        strategy_id: uuid,        
+        buy_and_indicator: {
+          id: uuidv4(),
+          category:"standard",
+          type:'or',
+          indicator_1 :'id1',
+          compare_operator:'>',
+          indicator_2 :'id2',
+          buyOrSell:'buy',
+          amount:0,
+          unit:'percent',
+        }
+      },
+    });
+    console.log(state);
+  };
+  const handleAddBuyLiveIndicator = () => {
+    dispatch({
+      type: StrategyTypes.ADD_BUY_INDICATOR,
+      payload: {
+        strategy_id: uuid,        
+        buy_and_indicator: {
+          id: uuidv4(),
+          category:"standard",
+          type:'live',
+          indicator_1 :'id1',
+          compare_operator:'>',
+          indicator_2 :'id2',
+          buyOrSell:'buy',
+          amount:0,
+          unit:'percent',
+        }
+      },
+    });
+    console.log(state);
+  };
+
   const handleToggle = (event: React.SyntheticEvent, nodeIds: string[]) => {
     setExpanded(nodeIds);
   };
@@ -115,9 +202,10 @@ function ControlledTreeView(props: any) {
                 </TreeItem> */}
       </TreeView>
       <Box sx={{ mb: 1 }}>
+        <Button onClick={handleCreatStrategyButton}>新增策略</Button>
         <Button onClick={handleAddBuyAndIndicator}>增加至符合全部</Button>
-        <Button onClick={handleSendSelected}>增加至符合指定</Button>
-        <Button onClick={handleSendSelected}>增加至盤中符合</Button>
+        <Button onClick={handleAddBuyOrIndicator}>增加至符合指定</Button>
+        <Button onClick={handleAddBuyLiveIndicator}>增加至盤中符合</Button>
       </Box>
     </Box>
   );
@@ -252,18 +340,15 @@ export default function BuySettings() {
       <Stack direction="row" sx={{ width: '100%' }}>
         <Stack direction="column" spacing={1}>
           <Box>
-            <Typography component="div" variant="h10">
+            {/* <Typography component="div" variant="h10">
               自訂指標
-            </Typography>
-            <ConditionBoard
+            </Typography> */}
+            {/* <ConditionBoard
               displayChips={selectedFactors}
               handleDeleteSelectedFactors={handleDeleteSelectedFactors}
-            />
+            /> */}
           </Box>
           <Box>
-            <Typography component="div" variant="h10">
-              指標條件
-            </Typography>
             {/* <Button >
                         新增買進賣出條件
                 </Button> */}

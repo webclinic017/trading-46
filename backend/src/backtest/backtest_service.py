@@ -74,23 +74,24 @@ def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start
     if strategy.take_profit != None:
         take_profit = strategy.take_profit
     for buy_script in strategy.strategy_code.buy_signal:
-        if buy_script[0] == "standard":
-            if buy_script[1] == "and":                    
-                buy_script_and_string += f"{buy_indent}if {BacktestParams(buy_script[2])} {BacktestParams(buy_script[3])} {BacktestParams(buy_script[4])}:\n"
-                buy_script_and_buy_pct = buy_script[5]
+        buy_script = buy_script.dict()
+        if buy_script.category == "standard":
+            if buy_script.type == "and":                    
+                buy_script_and_string += f"{buy_indent}if {BacktestParams(buy_script.indicator)} {BacktestParams(buy_script.compare_operator)} {BacktestParams(buy_script.indicator_2)}:\n"
+                buy_script_and_buy_pct = buy_script.amount
                 buy_indent += "    "
             elif buy_script[1] == "or":
-                buy_scipt_or_string += f"            if {BacktestParams(buy_script[2])} {BacktestParams(buy_script[3])} {BacktestParams(buy_script[4])}:\n                self.buy(size={float(buy_script[5])})\n"
+                buy_scipt_or_string += f"            if {BacktestParams(buy_script.indicator_1)} {BacktestParams(buy_script.compare_operator)} {BacktestParams(buy_script.indicator_2)}:\n                self.buy(size={float(buy_script[5])})\n"
     if buy_script_and_buy_pct != "":
         buy_script_and_string += f"{buy_indent}self.buy(size={buy_script_and_buy_pct})\n"
     for sell_script in strategy.strategy_code.sell_signal:
         if sell_script[0] == "standard":
             if sell_script[1] == "and":                    
-                sell_script_and_string += f"{sell_indent}if {BacktestParams(sell_script[2])} {BacktestParams(sell_script[3])} {BacktestParams(sell_script[4])}:\n"
+                sell_script_and_string += f"{sell_indent}if {BacktestParams(sell_script.indicator_1)} {BacktestParams(sell_script.compare_operator)} {BacktestParams(sell_script.indicator_2)}:\n"
                 sell_script_and_sell_pct = sell_script[5]
                 sell_indent += "    "
             elif sell_script[1] == "or":
-                sell_script_or_string += f"            if {BacktestParams(sell_script[2])} {BacktestParams(sell_script[3])} {BacktestParams(sell_script[4])}:\n                self.sell(size={float(sell_script[5])})\n"
+                sell_script_or_string += f"            if {BacktestParams(sell_script.indicator_1)} {BacktestParams(sell_script.compare_operator)} {BacktestParams(sell_script.indicator_2)}:\n                self.sell(size={float(sell_script[5])})\n"
     if sell_script_and_sell_pct != "":
         sell_script_and_string += f"{sell_indent}self.sell(size={sell_script_and_sell_pct})\n"
     if strategy.strategy_code.buy_first == True:

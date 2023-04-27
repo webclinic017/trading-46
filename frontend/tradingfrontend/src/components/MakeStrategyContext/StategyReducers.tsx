@@ -40,25 +40,25 @@ export enum BacktestTypes {
 }
 export enum StrategyTypes {
   Update = 'UPDATE_STRATEGY',
-  ADD_BUY_AND_INDICATOR = 'ADD_BUY_AND_INDICATOR',
+  ADD_BUY_INDICATOR = 'ADD_BUY_INDICATOR',
+  UPDATE_BUY_INDICATOR = 'UPDATE_BUY_INDICATOR',
+    ADD_SELL_INDICATOR = 'ADD_SELL_INDICATOR'
 }
 
 // Product
-
-type StrategyCode = {
-  init_indicators: string[];
-  stop_loss: number;
-  take_profit: number;
-  buy_first: boolean;
-  buy_signal: string[][];
-  sell_signal: string[][];
-};
 
 type Strategy = {
   strategy_id: string;
   strategy_name: string;
   strategy_description: string;
-  strategy_code: StrategyCode;
+  strategy_code:  {
+    init_indicators: string[];
+    stop_loss: number;
+    take_profit: number;
+    buy_first: boolean;
+    buy_signal: string[][];
+    sell_signal: string[][];
+  };
   strategy_type: string;
   strategy_parameters: string;
   strategy_author: string;
@@ -172,7 +172,14 @@ type StrategyPayload = {
     strategy_id: string;
     strategy_name: string;
     strategy_description: string;
-    strategy_code: StrategyCode;
+    strategy_code:  {
+        init_indicators: string[];
+        stop_loss: number;
+        take_profit: number;
+        buy_first: boolean;
+        buy_signal: string[][];
+        sell_signal: string[][];
+      };
     strategy_type: string;
     strategy_parameters: string;
     strategy_author: string;
@@ -182,7 +189,14 @@ type StrategyPayload = {
   };
   [Types.UpdateStategyCode]: {
     strategy_id: string;
-    strategy_code: StrategyCode;
+    strategy_code:  {
+        init_indicators: string[];
+        stop_loss: number;
+        take_profit: number;
+        buy_first: boolean;
+        buy_signal: string[][];
+        sell_signal: string[][];
+      };
   };
   [Types.Delete]: {
     strategy_id: string;
@@ -199,7 +213,14 @@ type StrategyPayload = {
   };
   [StrategyTypes.ADD_BUY_AND_INDICATOR]: {
     strategy_id: string;
-    strategy_code: StrategyCode;
+    strategy_code:  {
+        init_indicators: string[];
+        stop_loss: number;
+        take_profit: number;
+        buy_first: boolean;
+        buy_signal: string[];
+        sell_signal: string[];
+      };
   };
 };
 
@@ -386,8 +407,55 @@ export const StrategysReducer = (
           return task;
         }),
       ];
-
-    default:
+      case StrategyTypes.ADD_BUY_INDICATOR:
+        return [
+          ...state.map((task) => {
+            if (task.strategy_id === action.payload.strategy_id) {
+              return {
+                ...task,
+                strategy_code: {
+                  ...task.strategy_code,
+                  buy_signals: task.strategy_code.buy_signals.concat(
+                    action.payload.buy_and_indicator
+                  ),
+                },
+              };
+            }
+            return task;
+          }),
+        ];
+        case StrategyTypes.UPDATE_BUY_INDICATOR:
+            return [
+                ...state.map((task) => {
+                    if (task.strategy_id === action.payload.strategy_id) {
+                        return {
+                            ...task,
+                            strategy_code: {
+                                ...task.strategy_code,
+                                buy_signals: task.strategy_code.buy_signals.map((buy_signal) => {
+                                    if (buy_signal.uuid === action.payload.buy_and_indicator.uuid) {
+                                        return {
+                                            ...buy_signal,
+                                            id: action.payload.buy_and_indicator.id,
+                                            category: action.payload.buy_and_indicator.category,
+                                            type: action.payload.buy_and_indicator.type,
+                                            indicator_1: action.payload.buy_and_indicator.indicator_1,
+                                            compare: action.payload.buy_and_indicator.compare,
+                                            indicator_2: action.payload.buy_and_indicator.indicator_2,
+                                            buyOrSell: action.payload.buy_and_indicator.buyOrSell,
+                                            amount: action.payload.buy_and_indicator.amount,
+                                            unit: action.payload.buy_and_indicator.unit,
+                                        };
+                                    }
+                                    return buy_signal;
+                                }),
+                            },
+                        };
+                    }
+                    return task;
+                }),
+            ];
+      default:
       return state;
   }
 };

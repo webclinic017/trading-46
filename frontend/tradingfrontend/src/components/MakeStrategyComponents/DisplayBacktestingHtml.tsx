@@ -12,7 +12,7 @@ import Chip from '@mui/material/Chip';
 import TreeView from '@mui/lab/TreeView';
 import TreeItem from '@mui/lab/TreeItem';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import ConditionAddList from './ConditionAddList';
+import ConditionAddList from '../../../../../legacyFile/ConditionAddListLegacy';
 import { useState, useEffect, useContext } from 'react';
 import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
