@@ -284,23 +284,27 @@ export default function ConditionAddList(props: any) {
                 <Typography variant="h6" gutterBottom component="div">
                   符合全部條件
                 </Typography>
-                {state?.StategyTasks[0]?.strategy_code?.buy_signals.map((indicator, index) => {
-                  if (indicator.type === "and") {
-                    return (
-                      <Box sx={{ width: '100%' }} key={index}>
-                        <IndividualIndicators
-                          // indicatorList={indicatorList}
-                          // selectedFactors={props.selectedFactors}
-                          indicator={indicator}
-                          index={index}
-                        // removeIindicatorList={removeIindicatorList}
-                        // updateIndicatorList={updateIndicatorList}
-                        />
-                      </Box>
-                    );
-                  }
-                  // return null; // 如果不是 '買入'，返回 null，即不渲染任何元素
-                })}
+                <Stack direction="column" spacing={2}>
+
+                  {state?.StategyTasks[0]?.strategy_code?.buy_signals.map((indicator, index) => {
+                    if (indicator.type === "and") {
+                      return (
+
+                        <Box sx={{ width: '100%' }} key={index}>
+                          <IndividualIndicators
+                            // indicatorList={indicatorList}
+                            // selectedFactors={props.selectedFactors}
+                            indicator={indicator}
+                            index={index}
+                          // removeIindicatorList={removeIindicatorList}
+                          // updateIndicatorList={updateIndicatorList}
+                          />
+                        </Box>
+                      );
+                    }
+                    // return null; // 如果不是 '買入'，返回 null，即不渲染任何元素
+                  })}
+                </Stack>
 
                 <Stack direction="column" spacing={1}>
                   {indicatorList.map((indicator, index) => (
