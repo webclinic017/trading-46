@@ -32,8 +32,8 @@ import os
 
 def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start_date="2022-01-01", end_date=None, cash=1000000, commission=0.001425, username=""):
     pd_data = pd.read_csv(
-        '../csvdata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
-        # 'D:/studyplace/python_stock/quantitativetrading/trading/Alldata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
+        # '../csvdata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
+        'D:/studyplace/python_stock/quantitativetrading/trading/Alldata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
 
     # 將資料轉換成talib可以使用的格式
     pd_data2 = pd_data.rename(
@@ -71,27 +71,27 @@ def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start
     sell_script_and_sell_pct = ""
     buy_indent = "            "
     sell_indent = "            "
-    if strategy.take_profit != None:
-        take_profit = strategy.take_profit
+    # if strategy.take_profit != None:
+    #     take_profit = strategy.take_profit
     for buy_script in strategy.strategy_code.buy_signal:
-        buy_script = buy_script.dict()
+        # buy_script = buy_script.dict()
         if buy_script.category == "standard":
             if buy_script.type == "and":                    
-                buy_script_and_string += f"{buy_indent}if {BacktestParams(buy_script.indicator)} {BacktestParams(buy_script.compare_operator)} {BacktestParams(buy_script.indicator_2)}:\n"
+                buy_script_and_string += f"{buy_indent}if {BacktestParams(buy_script.indicator_1)} {BacktestParams(buy_script.compare_operator)} {BacktestParams(buy_script.indicator_2)}:\n"
                 buy_script_and_buy_pct = buy_script.amount
                 buy_indent += "    "
-            elif buy_script[1] == "or":
-                buy_scipt_or_string += f"            if {BacktestParams(buy_script.indicator_1)} {BacktestParams(buy_script.compare_operator)} {BacktestParams(buy_script.indicator_2)}:\n                self.buy(size={float(buy_script[5])})\n"
+            elif buy_script.type == "or":
+                buy_scipt_or_string += f"            if {BacktestParams(buy_script.indicator_1)} {BacktestParams(buy_script.compare_operator)} {BacktestParams(buy_script.indicator_2)}:\n                self.buy(size={float(buy_script.amount)})\n"
     if buy_script_and_buy_pct != "":
         buy_script_and_string += f"{buy_indent}self.buy(size={buy_script_and_buy_pct})\n"
     for sell_script in strategy.strategy_code.sell_signal:
-        if sell_script[0] == "standard":
-            if sell_script[1] == "and":                    
+        if sell_script.type == "standard":
+            if sell_script.type == "and":                    
                 sell_script_and_string += f"{sell_indent}if {BacktestParams(sell_script.indicator_1)} {BacktestParams(sell_script.compare_operator)} {BacktestParams(sell_script.indicator_2)}:\n"
                 sell_script_and_sell_pct = sell_script[5]
                 sell_indent += "    "
-            elif sell_script[1] == "or":
-                sell_script_or_string += f"            if {BacktestParams(sell_script.indicator_1)} {BacktestParams(sell_script.compare_operator)} {BacktestParams(sell_script.indicator_2)}:\n                self.sell(size={float(sell_script[5])})\n"
+            elif sell_script.type == "or":
+                sell_script_or_string += f"            if {BacktestParams(sell_script.indicator_1)} {BacktestParams(sell_script.compare_operator)} {BacktestParams(sell_script.indicator_2)}:\n                self.sell(size={float(sell_script.amount)})\n"
     if sell_script_and_sell_pct != "":
         sell_script_and_string += f"{sell_indent}self.sell(size={sell_script_and_sell_pct})\n"
     if strategy.strategy_code.buy_first == True:

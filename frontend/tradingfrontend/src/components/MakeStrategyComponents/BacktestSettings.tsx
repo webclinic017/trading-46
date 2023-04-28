@@ -118,7 +118,7 @@ export default function BacktestSettings() {
 
     await axios
       .post(
-        'http://localhost:8050/api/v1/backtest/single_backtesting_with_custom_strategy',
+        'http://localhost:8000/api/v1/backtest/single_backtesting_with_custom_strategy',
         data,
         config
       )
