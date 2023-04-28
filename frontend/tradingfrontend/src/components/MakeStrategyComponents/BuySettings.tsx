@@ -12,7 +12,7 @@ import Chip from '@mui/material/Chip';
 import TreeView from '@mui/lab/TreeView';
 import TreeItem from '@mui/lab/TreeItem';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import ConditionAddList from './ConditionAddList';
+import BuyConditionAddList from './BuyConditionAddList';
 import { useState, useEffect, useContext } from 'react';
 import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
@@ -40,7 +40,7 @@ function ControlledTreeView(props: any) {
   const [expanded, setExpanded] = React.useState<string[]>([]);
   const [selected, setSelected] = React.useState<string[]>([]);
 
-  let uuid =  state?.StategyTasks[0]?.strategy_id;
+  let uuid = state?.StategyTasks[0]?.strategy_id;
   const handleCreatStrategyButton = () => {
     dispatch({
       type: Types.Create,
@@ -70,17 +70,17 @@ function ControlledTreeView(props: any) {
     dispatch({
       type: StrategyTypes.ADD_BUY_INDICATOR,
       payload: {
-        strategy_id: uuid,        
+        strategy_id: uuid,
         buy_and_indicator: {
           id: uuidv4(),
-          category:"standard",
-          type:'and',
-          indicator_1 :'id1',
-          compare_operator:'>',
-          indicator_2 :'id2',
-          buyOrSell:'buy',
-          amount:0,
-          unit:'percent',
+          category: "standard",
+          type: 'and',
+          indicator_1: 'id1',
+          compare_operator: '>',
+          indicator_2: 'id2',
+          buyOrSell: 'buy',
+          amount: 0,
+          unit: 'percent',
         }
       },
     });
@@ -90,17 +90,17 @@ function ControlledTreeView(props: any) {
     dispatch({
       type: StrategyTypes.ADD_BUY_INDICATOR,
       payload: {
-        strategy_id: uuid,        
+        strategy_id: uuid,
         buy_and_indicator: {
           id: uuidv4(),
-          category:"standard",
-          type:'or',
-          indicator_1 :'id1',
-          compare_operator:'>',
-          indicator_2 :'id2',
-          buyOrSell:'buy',
-          amount:0,
-          unit:'percent',
+          category: "standard",
+          type: 'or',
+          indicator_1: 'id1',
+          compare_operator: '>',
+          indicator_2: 'id2',
+          buyOrSell: 'buy',
+          amount: 0,
+          unit: 'percent',
         }
       },
     });
@@ -110,17 +110,17 @@ function ControlledTreeView(props: any) {
     dispatch({
       type: StrategyTypes.ADD_BUY_INDICATOR,
       payload: {
-        strategy_id: uuid,        
+        strategy_id: uuid,
         buy_and_indicator: {
           id: uuidv4(),
-          category:"standard",
-          type:'live',
-          indicator_1 :'id1',
-          compare_operator:'>',
-          indicator_2 :'id2',
-          buyOrSell:'buy',
-          amount:0,
-          unit:'percent',
+          category: "standard",
+          type: 'live',
+          indicator_1: 'id1',
+          compare_operator: '>',
+          indicator_2: 'id2',
+          buyOrSell: 'buy',
+          amount: 0,
+          unit: 'percent',
         }
       },
     });
@@ -232,7 +232,7 @@ function ConditionBoard(props) {
             handleDelete(chip);
           }}
 
-          // deleteIcon={<AddCircleIcon />}
+        // deleteIcon={<AddCircleIcon />}
         />
       ))}
       {/* </Stack> */}
@@ -241,6 +241,96 @@ function ConditionBoard(props) {
 }
 export default function BuySettings() {
   const { state, dispatch } = React.useContext(StrategyContext);
+  const [expanded, setExpanded] = React.useState<string[]>([]);
+  const [selected, setSelected] = React.useState<string[]>([]);
+
+  let uuid = state?.StategyTasks[0]?.strategy_id;
+  const handleCreatStrategyButton = () => {
+    dispatch({
+      type: Types.Create,
+      payload: {
+        strategy_id: uuid,
+        strategy_name: 'temp',
+        strategy_description: 'temp',
+        strategy_code: {
+          init_indicators: [],
+          stop_loss: 'temp',
+          take_profit: 'temp',
+          buy_first: 'temp',
+          buy_signals: [],
+          sell_signals: [],
+        },
+        Strategy_type: 'temp',
+        strategy_parameters: [],
+        strategy_author: 'temp',
+        strategy_status: 'temp',
+        strategy_created_date: 'temp',
+        strategy_updated_date: 'temp',
+      },
+    });
+    console.log(state);
+  };
+  const handleAddBuyAndIndicator = () => {
+    dispatch({
+      type: StrategyTypes.ADD_BUY_INDICATOR,
+      payload: {
+        strategy_id: uuid,
+        buy_and_indicator: {
+          id: uuidv4(),
+          category: "standard",
+          type: 'and',
+          indicator_1: 'id1',
+          compare_operator: '>',
+          indicator_2: 'id2',
+          buyOrSell: 'buy',
+          amount: 0,
+          unit: 'percent',
+        }
+      },
+    });
+    console.log(state);
+  };
+  const handleAddBuyOrIndicator = () => {
+    dispatch({
+      type: StrategyTypes.ADD_BUY_INDICATOR,
+      payload: {
+        strategy_id: uuid,
+        buy_and_indicator: {
+          id: uuidv4(),
+          category: "standard",
+          type: 'or',
+          indicator_1: 'id1',
+          compare_operator: '>',
+          indicator_2: 'id2',
+          buyOrSell: 'buy',
+          amount: 0,
+          unit: 'percent',
+        }
+      },
+    });
+    console.log(state);
+  };
+  const handleAddBuyLiveIndicator = () => {
+    dispatch({
+      type: StrategyTypes.ADD_BUY_INDICATOR,
+      payload: {
+        strategy_id: uuid,
+        buy_and_indicator: {
+          id: uuidv4(),
+          category: "standard",
+          type: 'live',
+          indicator_1: 'id1',
+          compare_operator: '>',
+          indicator_2: 'id2',
+          buyOrSell: 'buy',
+          amount: 0,
+          unit: 'percent',
+        }
+      },
+    });
+    console.log(state);
+  };
+
   const [buyOrSell, setBuyOrSell] = React.useState('buy');
   console.log(state, 'state');
 
@@ -352,12 +442,20 @@ export default function BuySettings() {
             {/* <Button >
                         新增買進賣出條件
                 </Button> */}
-            <Stack direction="column" spacing={1}>
-              <Box style={{ width: '100%' }}>
+            <Stack direction="column" spacing={1} sx={{alignSelf:'center',width:'100%', justifyContent:'center'}}>
+            <Button onClick={handleCreatStrategyButton}>新增策略</Button>
+
+              {/* <Box sx={{ mb: 1 }}>
+                <Button onClick={handleCreatStrategyButton}>新增策略</Button>
+                <Button onClick={handleAddBuyAndIndicator}>增加至符合全部</Button>
+                <Button onClick={handleAddBuyOrIndicator}>增加至符合指定</Button>
+                <Button onClick={handleAddBuyLiveIndicator}>增加至盤中符合</Button>
+              </Box> */}
+              <Box style={{ width: '100%', }}>
                 {/* <Typography component="div" variant="h10">
                             買賣條件
                         </Typography> */}
-                <ConditionAddList
+                <BuyConditionAddList
                   selectedFactors={selectedFactors}
                   handleSingleBacktest={handleSingleBacktest}
                 />
@@ -370,9 +468,9 @@ export default function BuySettings() {
             </Stack>
           </Box>
         </Stack>
-        <Box style={{ width: '50%' }}>
+        {/* <Box style={{ width: '50%' }}>
           <ControlledTreeView buyOrSell={buyOrSell} />
-        </Box>
+        </Box> */}
       </Stack>
     </Box>
   );

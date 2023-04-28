@@ -12,8 +12,7 @@ class MongoEngine:
 
     MONGO_HOST = os.getenv('MONGO_HOST')
     MONGO_PORT = os.getenv('MONGO_PORT')
-    logger.info(f"MONGO_HOST: {MONGO_HOST}")
-    logger.info(f"MONGO_PORT: {MONGO_PORT}")
+
 
 
 

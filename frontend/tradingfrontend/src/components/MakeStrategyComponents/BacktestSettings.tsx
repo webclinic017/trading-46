@@ -21,6 +21,8 @@ import NativeSelect from '@mui/material/NativeSelect';
 
 import axios from 'axios';
 export default function BacktestSettings() {
+  const { state, dispatch } = React.useContext(StrategyContext);
+
   //以下為暫時用來測試的資料
   async function login(username, password) {
     const data = {
@@ -95,7 +97,7 @@ export default function BacktestSettings() {
   let backtest_str = `http://localhost:4041/htmlplots/test01@example.com_asd_${all_data.stock_symbol}.html`;
   console.log(backtest_str);
   return (
-    <>
+    
       <Box sx={{ flexGrow: 1 }}>
         <Card sx={{ display: 'flex' }}>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -201,6 +203,6 @@ export default function BacktestSettings() {
           <Button>單策略回測</Button>
         </Card>
       </Box>
-    </>
+    
   );
 }
