@@ -30,7 +30,7 @@ export default function BacktestSettings() {
       password: password,
     };
     await axios
-      .post('http://localhost:8050/api/v1/auth/login', data)
+      .post('http://localhost:8000/api/v1/auth/login', data)
       .then((response) => {
         console.log(response.data);
         localStorage.setItem('access_token', response.data.access_token);
@@ -45,10 +45,6 @@ export default function BacktestSettings() {
   const [all_data, setAll_data] = useState({
     stock_symbol: '2033',
     strategy_id: '6440e166e21de61de0e59e50',
-    buy_strategy:
-      'self.buy_pct = 0.5ChangeLine                self.sell_pct = 1',
-    sell_strategy:
-      'if backtesting.lib.crossover(self.ma10, self.ma20): self.buy()ChangeLine                elif backtesting.lib.crossover(self.ma20, self.ma10): self.sell()',
     plot: 'true',
     start_date: '2020-01-05',
     end_date: '2023-02-18',
@@ -60,12 +56,53 @@ export default function BacktestSettings() {
   }, [all_data]);
   let isTrueSet = all_data.plot === 'true';
   const [response, setResponse] = useState('');
+  async function addStrategy() {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      },
+    };
+    console.log(state?.StategyTasks[0]?.strategy_code.buy_signals)
+    const data = {
+      "strategy_id": "strategy_id",
+      "strategy_name": "strategy_name",
+      "strategy_description": "strategy_description",
+      "strategy_code": {
+        "init_indicators": [
+          "KD",
+          "MACD",
+          "RSI",
+          "SMA5"
+        ],
+        "stop_loss": 10,
+        "take_profit": 20,
+        "buy_first": true,
+        "buy_signal": state?.StategyTasks[0]?.strategy_code.buy_signals,
+        "sell_signal": state?.StategyTasks[0]?.strategy_code.sell_signals,
+      },
+      "strategy_type": "strategy_type",
+      "strategy_parameters": "strategy_parameters",
+      "strategy_author": "strategy_author",
+      "strategy_status": "strategy_status",
+      "strategy_created_date": "2023-04-28T06:54:49.663336",
+      "strategy_updated_date": "2023-04-28T06:54:49.663336",
+    }
+    await axios.post('http://localhost:8000/api/v1/strategies/add_strategy', data, config)
+      .then((response) => {
+        console.log(response.data);
+      }
+      ).catch((error) => {
+        console.log(error);
+      });
+  };
+
   async function single_test_with_custom_strategy() {
+    addStrategy()
     const data = {
       stock_symbol: all_data.stock_symbol,
       strategy_id: all_data.strategy_id,
-      buy_strategy: all_data.buy_strategy,
-      sellstrategy: all_data.sell_strategy,
+      // buy_strategy: state.,
+      // sellstrategy: all_data.sell_strategy,
       plot: isTrueSet,
       start_date: all_data.start_date,
       end_date: all_data.end_date,
@@ -97,112 +134,112 @@ export default function BacktestSettings() {
   let backtest_str = `http://localhost:4041/htmlplots/test01@example.com_asd_${all_data.stock_symbol}.html`;
   console.log(backtest_str);
   return (
-    
-      <Box sx={{ flexGrow: 1 }}>
-        <Card sx={{ display: 'flex' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Stack direction="row" spacing={1}>
-              <TextField
-                id="outlined-multiline-flexible"
-                label="stock_symbol"
-                multiline
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                value={all_data.stock_symbol}
-                onChange={(e) =>
-                  setAll_data({ ...all_data, stock_symbol: e.target.value })
-                }
-              ></TextField>
-              <TextField
-                id="outlined-multiline-flexible"
-                label="strategy_id"
-                multiline
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                value={all_data.strategy_id}
-                onChange={(e) =>
-                  setAll_data({ ...all_data, strategy_id: e.target.value })
-                }
-              ></TextField>
-              <Box sx={{ minWidth: 120 }}>
-                <FormControl fullWidth>
-                  <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                    plot
-                  </InputLabel>
-                  <NativeSelect
-                    defaultValue={30}
-                    inputProps={{
-                      name: 'age',
-                      id: 'uncontrolled-native',
-                    }}
-                    onChange={(e) =>
-                      setAll_data({ ...all_data, plot: e.target.value })
-                    }
-                  >
-                    <option value={'true'}>True</option>
-                    <option value={'false'}>False</option>
-                  </NativeSelect>
-                </FormControl>
-              </Box>
-            </Stack>
-            <Stack direction="row" spacing={1}>
-              <TextField
-                id="outlined-multiline-flexible"
-                label="start_date"
-                multiline
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                value={all_data.start_date}
-                onChange={(e) =>
-                  setAll_data({ ...all_data, start_date: e.target.value })
-                }
-              ></TextField>
-              <TextField
-                id="outlined-multiline-flexible"
-                label="end_date"
-                multiline
-                value={all_data.end_date}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={(e) =>
-                  setAll_data({ ...all_data, end_date: e.target.value })
-                }
-              ></TextField>
-              <TextField
-                id="outlined-multiline-flexible"
-                label="cash"
-                multiline
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                value={all_data.cash}
-                onChange={(e) =>
-                  setAll_data({ ...all_data, cash: e.target.value })
-                }
-              ></TextField>
-              <TextField
-                id="outlined-multiline-flexible"
-                label="commission"
-                multiline
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                value={all_data.commission}
-                onChange={(e) =>
-                  setAll_data({ ...all_data, commission: e.target.value })
-                }
-              ></TextField>
-            </Stack>
-            {response}
-            {/* <iframe title="cool" src={backtest_str} width="700px" height="500px"></iframe> */}
-          </Box>
-          <Button>單策略回測</Button>
-        </Card>
-      </Box>
-    
+
+    <Box sx={{ flexGrow: 1 }}>
+      <Card sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Stack direction="row" spacing={1}>
+            <TextField
+              id="outlined-multiline-flexible"
+              label="stock_symbol"
+              multiline
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={all_data.stock_symbol}
+              onChange={(e) =>
+                setAll_data({ ...all_data, stock_symbol: e.target.value })
+              }
+            ></TextField>
+            <TextField
+              id="outlined-multiline-flexible"
+              label="strategy_id"
+              multiline
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={all_data.strategy_id}
+              onChange={(e) =>
+                setAll_data({ ...all_data, strategy_id: e.target.value })
+              }
+            ></TextField>
+            <Box sx={{ minWidth: 120 }}>
+              <FormControl fullWidth>
+                <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                  plot
+                </InputLabel>
+                <NativeSelect
+                  defaultValue={30}
+                  inputProps={{
+                    name: 'age',
+                    id: 'uncontrolled-native',
+                  }}
+                  onChange={(e) =>
+                    setAll_data({ ...all_data, plot: e.target.value })
+                  }
+                >
+                  <option value={'true'}>True</option>
+                  <option value={'false'}>False</option>
+                </NativeSelect>
+              </FormControl>
+            </Box>
+          </Stack>
+          <Stack direction="row" spacing={1}>
+            <TextField
+              id="outlined-multiline-flexible"
+              label="start_date"
+              multiline
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={all_data.start_date}
+              onChange={(e) =>
+                setAll_data({ ...all_data, start_date: e.target.value })
+              }
+            ></TextField>
+            <TextField
+              id="outlined-multiline-flexible"
+              label="end_date"
+              multiline
+              value={all_data.end_date}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={(e) =>
+                setAll_data({ ...all_data, end_date: e.target.value })
+              }
+            ></TextField>
+            <TextField
+              id="outlined-multiline-flexible"
+              label="cash"
+              multiline
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={all_data.cash}
+              onChange={(e) =>
+                setAll_data({ ...all_data, cash: e.target.value })
+              }
+            ></TextField>
+            <TextField
+              id="outlined-multiline-flexible"
+              label="commission"
+              multiline
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={all_data.commission}
+              onChange={(e) =>
+                setAll_data({ ...all_data, commission: e.target.value })
+              }
+            ></TextField>
+          </Stack>
+          {response}
+          {/* <iframe title="cool" src={backtest_str} width="700px" height="500px"></iframe> */}
+        </Box>
+        <Button onClick={single_test_with_custom_strategy}>單策略回測</Button>
+      </Card>
+    </Box>
+
   );
 }
