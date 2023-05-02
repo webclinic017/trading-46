@@ -5,10 +5,13 @@ import Dndpage from '../pages/Dndpage';
 import Backtest from '../pages/Backtest';
 import StackedExample from "src/components/Navbar";
 import LeftTabsExample from "src/components/NabarBootstrap";
+
+import SelectStrategy from "src/components/MakeStrategyViewer/SelectStrategy";
 import SingleBacktest from "src/pages/SingleBacktest";
 import SignIn from "src/pages/SignIn";
 import SignUp from "src/pages/SignUp";
 import MakeStrategy from "src/pages/MakeStrategy";
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "src/scss/styles.scss";
 import { BrowserRouter, Route, Routes } from 'react-router-dom'

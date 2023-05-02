@@ -93,7 +93,7 @@ type InitialStateType = {
 }
 
 const initialState = {
-  StategyTasks: [],
+  StrategyTasks: [],
   Backtest:[],
   // StrategyServerTasks: [],
   // shoppingCart: 0,

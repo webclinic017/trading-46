@@ -133,7 +133,9 @@ def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start
     if plot:
         if os.path.isfile('../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol)):
             os.remove('../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol))
-        bt.plot(filename='../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
+        # bt.plot(filename='../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
+
+        bt.plot(filename='D:/studyplace/python_stock/quantitativetrading/trading/staticfilesserver/staticfiles/htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
     # bt.plot()
     # print((stats))
     # logger.info(stats.to_dict())

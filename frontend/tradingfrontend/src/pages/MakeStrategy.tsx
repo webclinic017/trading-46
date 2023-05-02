@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRef, useEffect, useState, useContext } from 'react';
 import MakeStrategyBoard from 'src/components/MakeStrategyComponents/MakeStrategyBoard';
+import SelectStrategy from 'src/components/MakeStrategyViewer/SelectStrategy';
 import { SortableItem } from './SortableItemS';
 import Container from 'react-bootstrap/Container';
 import Stack from '@mui/material/Stack';
@@ -82,9 +83,10 @@ export default function MakeStrategy() {
     >
       <Grid container spacing={2}>
         <Grid item xs={6} md={6}>
+        <Item><SelectStrategy /></Item>
+
           <Stack spacing={2} direction="column">
             <Item>單一個股回測</Item>
-
             <Item>
               <MakeStrategyBoard />
             </Item>

@@ -12,7 +12,7 @@ type ActionMap<M extends { [index: string]: any }> = {
 export enum Types {
     Create = 'CREATE_PRODUCT',
     Delete = 'DELETE_PRODUCT',
-    UpdateStategyCode = 'UPDATE_STRATEGY_CODE',
+    UpdateStrategyCode = 'UPDATE_STRATEGY_CODE',
     CreateBacktest = 'CREATE_BACKTEST',
     DeleteBacktest = 'DELETE_BACKTEST',
     UpdateBacktest = 'UPDATE_BACKTEST',
@@ -190,7 +190,7 @@ type StrategyPayload = {
         strategy_created_date: string;
         strategy_updated_date: string;
     };
-    [Types.UpdateStategyCode]: {
+    [Types.UpdateStrategyCode]: {
         strategy_id: string;
         strategy_code: {
             init_indicators: string[];
@@ -536,7 +536,7 @@ export const StrategysReducer = (
                     return task;
                 }),
             ];
-            
+
         default:
             return state;
     }

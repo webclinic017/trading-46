@@ -40,5 +40,11 @@ class StrategiesService():
         return strategy
     async def findStrategyByAuthor(author: str):
         logger.info("findStrategyByAuthor", author)
-        strategy = await MongoEngine.getEngine().find(Strategy, Strategy.author == author)
+        strategy = await MongoEngine.getEngine().find(Strategy, Strategy.strategy_author == author)
         return strategy
+    async def get_all_strategies():
+        strategy = await MongoEngine.getEngine().find(Strategy)
+        return strategy
+    async def update_strategy(id: ObjectId, strategy: Strategy):
+        await MongoEngine.getEngine().save(strategy)
+        return {"message": "Update strategy successfully"}

@@ -40,6 +40,8 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignInSide() {
+    const history = useNavigate();
+
     const validationSchema = yup.object({
         email: yup
             .string()
@@ -54,7 +56,7 @@ export default function SignInSide() {
 
     const onSubmit = async (values) => {
         const response = await axios
-            .post(AUTH_API_NODE + "/login", values)
+            .post(AUTH_API_NODE + "login", values)
             .catch((err) => {
                 if (err.response.data.error_code === "1010002") {
                     setErrorcode(true);
@@ -81,8 +83,9 @@ export default function SignInSide() {
             });
 
         if (response) {
-            history.push("/loading");
             localStorage.setItem("accessToken", response.data.access_token);
+            history('/makestrategy')
+
             // alert("Welcome back in. Authenticating...");
             //console.log(response);
         }
@@ -95,7 +98,6 @@ export default function SignInSide() {
         validationSchema: validationSchema,
     });
 
-    const history = useNavigate();
 
     const [showAlert, setShowAlert] = useState(null);
 
@@ -115,14 +117,7 @@ export default function SignInSide() {
         formik.initialValues.email = localStorage.getItem("useremail");
     }
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-    };
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -159,7 +154,7 @@ export default function SignInSide() {
                             <Typography component="h1" variant="h5">
                                 Sign in
                             </Typography>
-                            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                            <Box component="form" noValidate onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
                                 <TextField
                                     margin="normal"
                                     required
