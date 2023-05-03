@@ -18,7 +18,7 @@ import {
   Types,
   BacktestTypes,
   StrategyTypes,
-} from '../MakeStrategyContext/StategyReducers';
+} from '../MakeStrategyContext/StrategyReducers';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -42,19 +42,19 @@ export default function SellConditionAddList(props: any) {
 
     const [openEdit, setOpenEdit] = React.useState(false);
     const [comparsionOperator, setComparsionOperator] = React.useState(
-      props.indicator?.compare_operator
+      props?.indicator?.compare_operator
     );
     const [selectedIindicator1, setSelectedIindicator1] = React.useState(
-      props.indicator?.indicator_1
+      props?.indicator?.indicator_1
     );
     const [selectedIindicator2, setSelectedIindicator2] = React.useState(
-      props.indicator?.indicator_2
+      props?.indicator?.indicator_2
     );
     const [buyOrSell, setBuyOrSell] = React.useState(
-      props.indicator?.buyOrSell
+      props?.indicator?.buyOrSell
     );
     const [buySellAmount, setBuySellAmount] = React.useState(
-      props.indicator?.amount
+      props?.indicator?.amount
     );
     const [compareMode, setCompareMode] = React.useState(true);
     const handleOperatorChange = (event: SelectChangeEvent) => {
@@ -456,7 +456,7 @@ export default function SellConditionAddList(props: any) {
   //     />
   //   </Box>
   // ))}
-  let uuid = state?.StategyTasks[0]?.strategy_id
+  let uuid = state?.StrategyTasks[0]?.strategy_id
   const handleAddBuyAndIndicator = () => {
     dispatch({
       type: StrategyTypes.ADD_SELL_INDICATOR,
@@ -534,7 +534,7 @@ export default function SellConditionAddList(props: any) {
                 </Stack>
                 <Stack direction="column" spacing={2}>
 
-                  {state?.StategyTasks[0]?.strategy_code?.sell_signals.map((indicator, index) => {
+                  {state?.StrategyTasks[0]?.strategy_code?.sell_signal.map((indicator, index) => {
                     if (indicator.type === "and") {
                       return (
 
@@ -542,7 +542,7 @@ export default function SellConditionAddList(props: any) {
                           <IndividualIndicators
                             // indicatorList={indicatorList}
                             // selectedFactors={props.selectedFactors}
-                            strategy_id={state?.StategyTasks[0]?.strategy_id}
+                            strategy_id={state?.StrategyTasks[0]?.strategy_id}
                             indicator={indicator}
                             index={index}
                           // removeIindicatorList={removeIindicatorList}
@@ -565,7 +565,7 @@ export default function SellConditionAddList(props: any) {
                   <Button onClick={handleAddBuyOrIndicator}>增加條件</Button>
                 </Stack>
                 <Stack direction="column" spacing={1}>
-                  {state?.StategyTasks[0]?.strategy_code?.sell_signals.map((indicator, index) => {
+                  {state?.StrategyTasks[0]?.strategy_code?.sell_signal.map((indicator, index) => {
                     if (indicator.type === "or") {
                       return (
 
@@ -573,7 +573,7 @@ export default function SellConditionAddList(props: any) {
                           <IndividualIndicators
                             // indicatorList={indicatorList}
                             // selectedFactors={props.selectedFactors}
-                            strategy_id={state?.StategyTasks[0]?.strategy_id}
+                            strategy_id={state?.StrategyTasks[0]?.strategy_id}
                             indicator={indicator}
                             index={index}
                           // removeIindicatorList={removeIindicatorList}
@@ -593,7 +593,7 @@ export default function SellConditionAddList(props: any) {
                   <Button onClick={handleAddBuyLiveIndicator}>增加條件</Button>
                 </Stack>
                 <Stack direction="column" spacing={2}>
-                  {state?.StategyTasks[0]?.strategy_code?.sell_signals.map((indicator, index) => {
+                  {state?.StrategyTasks[0]?.strategy_code?.sell_signal.map((indicator, index) => {
                     if (indicator.type === "live") {
                       return (
 
@@ -601,7 +601,7 @@ export default function SellConditionAddList(props: any) {
                           <IndividualIndicators
                             // indicatorList={indicatorList}
                             // selectedFactors={props.selectedFactors}
-                            strategy_id={state?.StategyTasks[0]?.strategy_id}
+                            strategy_id={state?.StrategyTasks[0]?.strategy_id}
                             indicator={indicator}
                             index={index}
                           // removeIindicatorList={removeIindicatorList}

@@ -26,7 +26,7 @@ class StrategyCode(EmbeddedModel):
     sell_signal: List[Signal] = Field(...)
 
 class Strategy(Model):
-    strategy_id: str = Field("strategy_id")
+    strategy_id: str
     strategy_name: str = Field("strategy_name")
     strategy_description: str = Field("strategy_description")
     strategy_code: StrategyCode = Field(StrategyCode(

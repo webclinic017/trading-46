@@ -14,8 +14,10 @@ import Stack from '@mui/material/Stack';
 import BoardSectionList from 'src/components/dndComponents/BoardSectionList';
 import DisplayBacktestingHtml from 'src/components/MakeStrategyComponents/DisplayBacktestingHtml';
 import BacktestSettings from 'src/components/MakeStrategyComponents/BacktestSettings';
-
+import SelectStrategySelectBar from 'src/components/MakeStrategyComponents/SelectStrategySelectBar';
 import { DndContext, closestCenter } from '@dnd-kit/core';
+import { StrategyContext } from 'src/components/MakeStrategyContext/StrategyContext';
+
 import {
   arrayMove,
   SortableContext,
@@ -32,6 +34,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function MakeStrategy() {
+  const { state, dispatch } = React.useContext(StrategyContext);
   const windowSize = useRef([window.innerWidth, window.innerHeight]);
   let leftPixel = windowSize.current[0] > 1440 ? '312px' : '84px';
   const [languages, setLanguages] = useState([
@@ -56,6 +59,7 @@ export default function MakeStrategy() {
       });
     }
   }
+
   //     <DndContext
   //     collisionDetection={closestCenter}
   //     onDragEnd={handleDragEnd}
@@ -81,27 +85,33 @@ export default function MakeStrategy() {
         left: '84px',
       }}
     >
-      <Grid container spacing={2}>
-        <Grid item xs={6} md={6}>
-        <Item><SelectStrategy /></Item>
-
-          <Stack spacing={2} direction="column">
-            <Item>單一個股回測</Item>
-            <Item>
-              <MakeStrategyBoard />
-            </Item>
-            {/* <Item>
+      {state?.SingleBacktest.length !== 0 ?
+        <Grid container spacing={2}>
+          <Grid item xs={6} md={6}>
+            <Stack spacing={2} direction="column">
+              <Item>單一個股回測</Item>
+              <Item>
+                <SelectStrategySelectBar/>
+              </Item>
+              <Item>
+                <MakeStrategyBoard />
+              </Item>
+              {/* <Item>
               <BacktestSettings />
             </Item> */}
-          </Stack>
-        </Grid>
-        <Grid item xs={6} md={6} xl={6} lg={6}>
-          <Item style={{ minHeight: '500px' }}>
-            <DisplayBacktestingHtml />
-          </Item>
-          {/* <BoardSectionList /> */}
-        </Grid>
-      </Grid>
+            </Stack>
+          </Grid>
+          <Grid item xs={6} md={6} xl={6} lg={6}>
+            <Item style={{ minHeight: '500px' }}>
+              <DisplayBacktestingHtml />
+            </Item>
+            {/* <BoardSectionList /> */}
+          </Grid>
+        </Grid> : <Grid container spacing={2}>
+          <Grid item xs={6} md={6}>
+            <Item><SelectStrategy /></Item>
+          </Grid>
+        </Grid>}
     </Box>
   );
 }

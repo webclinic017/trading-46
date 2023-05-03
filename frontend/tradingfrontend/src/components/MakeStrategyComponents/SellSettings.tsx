@@ -27,7 +27,7 @@ import {
   Types,
   BacktestTypes,
   StrategyTypes,
-} from '../MakeStrategyContext/StategyReducers';
+} from '../MakeStrategyContext/StrategyReducers';
 import SwipeableViews from 'react-swipeable-views';
 import { useTheme } from '@mui/material/styles';
 import BacktestSettings from './BacktestSettings';
@@ -40,7 +40,7 @@ function ControlledTreeView(props: any) {
   const [expanded, setExpanded] = React.useState<string[]>([]);
   const [selected, setSelected] = React.useState<string[]>([]);
 
-  let uuid = state?.StategyTasks[0]?.strategy_id;
+  let uuid = state?.StrategyTasks[0]?.strategy_id;
   const handleCreatStrategyButton = () => {
     dispatch({
       type: Types.Create,
@@ -244,7 +244,7 @@ export default function BuySettings() {
   const [expanded, setExpanded] = React.useState<string[]>([]);
   const [selected, setSelected] = React.useState<string[]>([]);
 
-  let uuid = state?.StategyTasks[0]?.strategy_id;
+  let uuid = state?.StrategyTasks[0]?.strategy_id;
   const handleCreatStrategyButton = () => {
     dispatch({
       type: Types.Create,
@@ -443,7 +443,7 @@ export default function BuySettings() {
                         新增買進賣出條件
                 </Button> */}
             <Stack direction="column" spacing={1} sx={{alignSelf:'center',width:'100%', justifyContent:'center'}}>
-            <Button onClick={handleCreatStrategyButton}>新增策略</Button>
+            {/* <Button onClick={handleCreatStrategyButton}>新增策略</Button> */}
 
               {/* <Box sx={{ mb: 1 }}>
                 <Button onClick={handleCreatStrategyButton}>新增策略</Button>

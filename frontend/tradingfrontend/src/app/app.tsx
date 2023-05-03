@@ -16,18 +16,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "src/scss/styles.scss";
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { StrategyContext } from 'src/components/MakeStrategyContext/StrategyContext'
-import { StrategysReducer,SingleBacktestReducer } from 'src/components/MakeStrategyContext/StategyReducers';
+import { StrategysReducer,SingleBacktestReducer } from 'src/components/MakeStrategyContext/StrategyReducers';
 const StyledApp = styled.div`
   // Your style here
 `;
 
 export function App() {
   const initialState = {
-    StategyTasks: [],
+    StrategyTasks: [],
     SingleBacktest: []
   };
-  const mainReducer = ({ StategyTasks, SingleBacktest }, action) => ({
-    StategyTasks: StrategysReducer(StategyTasks, action),
+  const mainReducer = ({ StrategyTasks, SingleBacktest }, action) => ({
+    StrategyTasks: StrategysReducer(StrategyTasks, action),
     SingleBacktest: SingleBacktestReducer(SingleBacktest, action)
   });
   const [state, dispatch] = React.useReducer(mainReducer, initialState);
@@ -44,8 +44,7 @@ export function App() {
 
 
           <Routes>
-            <Route path="/Singlebacktest" element={<><StackedExample />
-              <SingleBacktest /></>} />
+            <Route path="/Singlebacktest" element={<><StackedExample /><SingleBacktest /></>} />
             <Route path="/backtest" element={<><StackedExample /><Backtest /></>} />
             <Route path="/makestrategy" element={<><StackedExample /><MakeStrategy /></>} />
           </Routes>

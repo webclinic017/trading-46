@@ -106,6 +106,19 @@ async def get_strategy_by_author(current_user: User = Depends(get_current_active
     except Exception as e:
         logger.error(e)
         raise HTTPException(status_code=500, detail="Internal server error")
+
+@strategies_router.post("/update_strategy_by_id")
+async def update_strategy_by_id(strategy:Strategy,current_user: User = Depends(get_current_active_user)):
+    # if StrategiesService.findStrategyById(strategy.id) is None:
+    #     raise HTTPException(status_code=404, detail="Strategy not found")
+    try:
+        # strategy.strategy_id = ObjectId(strategy.id)
+        strategy = await StrategiesService.update_strategy(strategy)
+        return strategy
+    except Exception as e:
+        logger.error(e)
+        raise HTTPException(status_code=500, detail="Internal server error")
+    
 # @strategies_router.delete("/delete_strategy")
 # async def delete_strategy(strategy_id: str, current_user: User = Depends(get_current_active_user)):
 #     if not

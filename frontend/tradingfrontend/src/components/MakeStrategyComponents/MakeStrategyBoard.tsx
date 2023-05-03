@@ -23,7 +23,7 @@ import NativeSelect from '@mui/material/NativeSelect';
 import InputLabel from '@mui/material/InputLabel';
 import axios from 'axios';
 import { StrategyContext } from '../MakeStrategyContext/StrategyContext';
-import { Types } from '../MakeStrategyContext/StategyReducers';
+import { Types } from '../MakeStrategyContext/StrategyReducers';
 import SwipeableViews from 'react-swipeable-views';
 import { useTheme } from '@mui/material/styles';
 import BacktestSettings from './BacktestSettings';

@@ -45,6 +45,7 @@ class StrategiesService():
     async def get_all_strategies():
         strategy = await MongoEngine.getEngine().find(Strategy)
         return strategy
-    async def update_strategy(id: ObjectId, strategy: Strategy):
+
+    async def update_strategy(strategy: Strategy):
         await MongoEngine.getEngine().save(strategy)
         return {"message": "Update strategy successfully"}

@@ -13,9 +13,6 @@ export enum Types {
     Create = 'CREATE_PRODUCT',
     Delete = 'DELETE_PRODUCT',
     UpdateStrategyCode = 'UPDATE_STRATEGY_CODE',
-    CreateBacktest = 'CREATE_BACKTEST',
-    DeleteBacktest = 'DELETE_BACKTEST',
-    UpdateBacktest = 'UPDATE_BACKTEST',
     AddBacktest = 'ADD_BACKTEST',
     Add = 'ADD_PRODUCT',
     UpdateUser = 'UPDATE_USER',
@@ -36,10 +33,16 @@ export enum ServerTypes {
 }
 
 export enum BacktestTypes {
-    Update = 'UPDATE_BACKTEST',
+    CREATE_BACKTEST = 'CREATE_BACKTEST',
+    DELETE_BACKTEST = 'DELETE_BACKTEST',
+    UPDATE_BACKTEST_USER = 'UPDATE_BACKTEST_USER',
+    DELETE_ALL = 'DELETE_ALL',
+    UPDATE_BACKTEST_ALL = 'UPDATE_BACKTEST_ALL',
+    UPDATE_BACKTEST_STRATEGY = 'UPDATE_BACKTEST_STRATEGY',
+    UPDATE_BACKTEST_HTML = 'UPDATE_BACKTEST_HTML',
 }
 export enum StrategyTypes {
-    Update = 'UPDATE_STRATEGY',
+    UPDATE = 'UPDATE_STRATEGY',
     ADD_BUY_INDICATOR = 'ADD_BUY_INDICATOR',
     UPDATE_BUY_INDICATOR = 'UPDATE_BUY_INDICATOR',
     ADD_SELL_INDICATOR = 'ADD_SELL_INDICATOR',
@@ -84,6 +87,10 @@ type SingleBacktest = {
     backtest_id: string;
     backtest_name: string;
     backtest_description: Description;
+    backtest_strategy: {
+        strategy_id: string;
+        strategy_name: string;
+    }
     backtest_code: string;
     backtest_type: string;
     backtest_parameters: string;
@@ -129,7 +136,20 @@ type StrategyServerTaskPayload = {
 };
 
 type SingleBacktestPayload = {
-    [Types.CreateBacktest]: {
+    [BacktestTypes.DELETE_BACKTEST]: {
+        backtest_id: string;
+    };
+    [BacktestTypes.CREATE_BACKTEST]: {
+        backtest_id: string;
+    };
+    [BacktestTypes.UPDATE_BACKTEST_USER]: {
+        backtest_id: string;
+        backtest_author: string;
+    };
+    [BacktestTypes.DELETE_ALL]: {
+        backtest_id: string;
+    };
+    [BacktestTypes.UPDATE_BACKTEST_ALL]: {
         backtest_id: string;
         backtest_name: string;
         backtest_description: Description;
@@ -142,32 +162,18 @@ type SingleBacktestPayload = {
         backtest_created_date: string;
         backtest_updated_date: string;
     };
-    [Types.DeleteBacktest]: {
+    [BacktestTypes.UPDATE_BACKTEST_STRATEGY]: {
         backtest_id: string;
+        backtest_strategy: {
+            strategy_id: string;
+            strategy_name: string;
+        }
     };
-    [Types.AddBacktest]: {
+    [BacktestTypes.UPDATE_BACKTEST_HTML]: {
         backtest_id: string;
-    };
-    [Types.UpdateUser]: {
-        backtest_id: string;
-        backtest_author: string;
-    };
-    [Types.DeleteAll]: {
-        backtest_id: string;
-    };
-    [BacktestTypes.Update]: {
-        backtest_id: string;
-        backtest_name: string;
-        backtest_description: Description;
-        backtest_code: string;
-        backtest_type: string;
-        backtest_parameters: string;
-        backtest_author: string;
-        backtest_status: string;
         backtest_html: string;
-        backtest_created_date: string;
-        backtest_updated_date: string;
     };
+    
 };
 
 type StrategyPayload = {
@@ -214,7 +220,7 @@ type StrategyPayload = {
     [Types.DeleteAll]: {
         strategy_id: string;
     };
-    [StrategyTypes.ADD_BUY_AND_INDICATOR]: {
+    [StrategyTypes.ADD_BUY_INDICATOR]: {
         strategy_id: string;
         strategy_code: {
             init_indicators: string[];
@@ -224,6 +230,25 @@ type StrategyPayload = {
             buy_signal: string[];
             sell_signal: string[];
         };
+    };
+    [StrategyTypes.UPDATE]:{
+        strategy_id: string;
+        strategy_name: string;
+        strategy_description: string;
+        strategy_code: {
+            init_indicators: string[];
+            stop_loss: number;
+            take_profit: number;
+            buy_first: boolean;
+            buy_signal: string[][];
+            sell_signal: string[][];
+        };
+        strategy_type: string;
+        strategy_parameters: string;
+        strategy_author: string;
+        strategy_status: string;
+        strategy_created_date: string;
+        strategy_updated_date: string;
     };
 };
 
@@ -306,12 +331,13 @@ export const SingleBacktestReducer = (
     action: SingleBacktestActions
 ) => {
     switch (action.type) {
-        case Types.CreateBacktest:
+        case BacktestTypes.CREATE_BACKTEST:
             return [
                 ...state,
                 {
                     backtest_id: action.payload.backtest_id,
                     backtest_name: action.payload.backtest_name,
+                    backtest_strategy: action.payload.backtest_strategy,
                     backtest_description: action.payload.backtest_description,
                     backtest_code: action.payload.backtest_code,
                     backtest_type: action.payload.backtest_type,
@@ -323,19 +349,20 @@ export const SingleBacktestReducer = (
                     backtest_updated_date: action.payload.backtest_updated_date,
                 },
             ];
-        case Types.DeleteBacktest:
+        case BacktestTypes.DELETE_BACKTEST:
             return [
                 ...state.filter(
                     (task) => task.backtest_id !== action.payload.backtest_id
                 ),
             ];
-        case Types.DeleteAll:
+        case BacktestTypes.DELETE_ALL:
             return [];
-        case BacktestTypes.Update:
+        case BacktestTypes.UPDATE_BACKTEST_ALL:
             return [
                 ...state.map((task) => {
                     if (task.backtest_id === action.payload.backtest_id) {
                         return {
+                            backtest_strategy: action.payload.backtest_strategy,
                             backtest_id: action.payload.backtest_id,
                             backtest_name: action.payload.backtest_name,
                             backtest_description: action.payload.backtest_description,
@@ -352,11 +379,36 @@ export const SingleBacktestReducer = (
                     return task;
                 }),
             ];
+        case BacktestTypes.UPDATE_BACKTEST_STRATEGY:
+            return [
+                ...state.map((task) => {
+                    if (task.backtest_id === action.payload.backtest_id) {
+                        return {
+                            ...task,
+                            backtest_id: action.payload.backtest_id,
+                            backtest_strategy: action.payload.backtest_strategy,
+                        };
+                    }
+                    return task;
+                }),
+            ];
+        case BacktestTypes.UPDATE_BACKTEST_HTML:
+            return [
+                ...state.map((task) => {
+                    if (task.backtest_id === action.payload.backtest_id) {
+                        return {
+                            ...task,
+                            backtest_id: action.payload.backtest_id,
+                            backtest_html: action.payload.backtest_html,
+                        };
+                    }
+                    return task;
+                }),
+            ];
         default:
             return state;
     }
 };
-
 export const StrategysReducer = (
     state: Strategy[],
     action: StrategyActions
@@ -398,7 +450,7 @@ export const StrategysReducer = (
                     return task;
                 }),
             ];
-        case Types.UpdateStategyCode:
+        case Types.UpdateStrategyCode:
             return [
                 ...state.map((task) => {
                     if (task.strategy_id === action.payload.strategy_id) {
@@ -418,7 +470,7 @@ export const StrategysReducer = (
                             ...task,
                             strategy_code: {
                                 ...task.strategy_code,
-                                buy_signals: task.strategy_code.buy_signals.concat(
+                                buy_signal: task.strategy_code.buy_signal.concat(
                                     action.payload.buy_and_indicator
                                 ),
                             },
@@ -435,7 +487,7 @@ export const StrategysReducer = (
                             ...task,
                             strategy_code: {
                                 ...task.strategy_code,
-                                buy_signals: task.strategy_code.buy_signals.map((buy_signal) => {
+                                buy_signal: task.strategy_code.buy_signal.map((buy_signal) => {
                                     if (buy_signal.id === action.payload.buy_and_indicator.id) {
                                         return {
                                             ...buy_signal,
@@ -466,7 +518,7 @@ export const StrategysReducer = (
                             ...task,
                             strategy_code: {
                                 ...task.strategy_code,
-                                buy_signals: task.strategy_code.buy_signals.filter((buy_signal) => buy_signal.id !== action.payload.buy_and_indicator.id),
+                                buy_signal: task.strategy_code.buy_signal.filter((buy_signal) => buy_signal.id !== action.payload.buy_and_indicator.id),
                             },
                         };
                     }
@@ -481,7 +533,7 @@ export const StrategysReducer = (
                             ...task,
                             strategy_code: {
                                 ...task.strategy_code,
-                                sell_signals: task.strategy_code.sell_signals.concat(
+                                sell_signal: task.strategy_code.sell_signal.concat(
                                     action.payload.sell_and_indicator
                                 ),
                             },
@@ -498,7 +550,7 @@ export const StrategysReducer = (
                             ...task,
                             strategy_code: {
                                 ...task.strategy_code,
-                                sell_signals: task.strategy_code.sell_signals.map((sell_signal) => {
+                                sell_signal: task.strategy_code.sell_signal.map((sell_signal) => {
                                     if (sell_signal.id === action.payload.sell_and_indicator.id) {
                                         return {
                                             ...sell_signal,
@@ -529,14 +581,28 @@ export const StrategysReducer = (
                             ...task,
                             strategy_code: {
                                 ...task.strategy_code,
-                                sell_signals: task.strategy_code.sell_signals.filter((sell_signal) => sell_signal.id !== action.payload.sell_and_indicator.id),
+                                sell_signal: task.strategy_code.sell_signal.filter((sell_signal) => sell_signal.id !== action.payload.sell_and_indicator.id),
                             },
                         };
                     }
                     return task;
                 }),
             ];
-
+        case StrategyTypes.UPDATE:
+            return [
+                {
+                    strategy_id: action.payload.strategy_id,
+                    strategy_name: action.payload.strategy_name,
+                    strategy_description: action.payload.strategy_description,
+                    strategy_code: action.payload.strategy_code,
+                    strategy_type: action.payload.strategy_type,
+                    strategy_parameters: action.payload.strategy_parameters,
+                    strategy_author: action.payload.strategy_author,
+                    strategy_status: action.payload.strategy_status,
+                    strategy_created_date: action.payload.strategy_created_date,
+                    strategy_updated_date: action.payload.strategy_updated_date,
+                }
+            ];
         default:
             return state;
     }
