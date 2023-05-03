@@ -356,75 +356,7 @@ export default function BuySettings() {
   };
 
   //以下為暫時用來測試的資料
-  async function login(username, password) {
-    const data = {
-      email: username,
-      password: password,
-    };
-    await axios
-      .post('http://localhost:8050/api/v1/auth/login', data)
-      .then((response) => {
-        console.log(response.data);
-        localStorage.setItem('access_token', response.data.access_token);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-  useEffect(() => {
-    login('test01@example.com', '123456');
-  }, []);
-  const [all_data, setAll_data] = useState({
-    stock_symbol: '2033',
-    strategy_id: '6440e166e21de61de0e59e50',
-    buy_strategy:
-      'self.buy_pct = 0.5ChangeLine                self.sell_pct = 1',
-    sell_strategy:
-      'if backtesting.lib.crossover(self.ma10, self.ma20): self.buy()ChangeLine                elif backtesting.lib.crossover(self.ma20, self.ma10): self.sell()',
-    plot: 'true',
-    start_date: '2020-01-05',
-    end_date: '2023-02-18',
-    cash: '10000000',
-    commission: '0.00145',
-  });
-  useEffect(() => {
-    console.log(all_data);
-  }, [all_data]);
-  let isTrueSet = all_data.plot === 'true';
-  const [response, setResponse] = useState('');
-  async function single_test_with_custom_strategy() {
-    const data = {
-      stock_symbol: all_data.stock_symbol,
-      strategy_id: all_data.strategy_id,
-      buy_strategy: all_data.buy_strategy,
-      sellstrategy: all_data.sell_strategy,
-      plot: isTrueSet,
-      start_date: all_data.start_date,
-      end_date: all_data.end_date,
-      cash: parseFloat(all_data.cash),
-      commission: parseFloat(all_data.commission),
-    };
-    console.log(data);
-    const config = {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-      },
-    };
-
-    await axios
-      .post(
-        'http://localhost:8050/api/v1/backtest/single_backtesting_with_custom_strategy',
-        data,
-        config
-      )
-      .then((response) => {
-        console.log(response.data);
-        setResponse(response.data.date);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  
   return (
     <Box sx={{ width: '100%' }}>
       <Stack direction="row" sx={{ width: '100%' }}>
