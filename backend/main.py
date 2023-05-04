@@ -77,7 +77,7 @@ origins = [
     "http://localhost:3000",
     'http://localhost:3005',
     'http://localhost:3000/mainpage/AlbumView',
-    '[*]',
+    '*',
 ]
 
 app.add_middleware(
@@ -88,12 +88,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.options("/{path:path}")
-async def options_route(path: str, response: Response):
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-    return {}
+
 # middleware = [
 #     Middleware(
 #         CORSMiddleware,
