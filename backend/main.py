@@ -7,6 +7,7 @@ from re import U
 from motor.motor_asyncio import AsyncIOMotorClient
 from odmantic import AIOEngine
 from datetime import datetime
+from fastapi import  Response
 from fastapi.responses import HTMLResponse
 from fastapi import Depends, FastAPI, Request,WebSocket
 import uvicorn
@@ -87,7 +88,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+@app.options("/{path:path}")
+async def options_route(path: str, response: Response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    return {}
 # middleware = [
 #     Middleware(
 #         CORSMiddleware,

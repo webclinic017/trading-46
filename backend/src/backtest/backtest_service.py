@@ -32,7 +32,7 @@ import os
 
 def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start_date="2022-01-01", end_date=None, cash=1000000, commission=0.001425, username=""):
     pd_data = pd.read_csv(
-        '../csv/data/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
+        '../csvdata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
         # 'D:/studyplace/python_stock/quantitativetrading/trading/Alldata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
 
     # 將資料轉換成talib可以使用的格式
