@@ -32,8 +32,8 @@ import os
 
 def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start_date="2022-01-01", end_date=None, cash=1000000, commission=0.001425, username=""):
     pd_data = pd.read_csv(
-        # '../csvdata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
-        'D:/studyplace/python_stock/quantitativetrading/trading/Alldata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
+        '../csv/data/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
+        # 'D:/studyplace/python_stock/quantitativetrading/trading/Alldata/{}_change.csv'.format(stock_symbol), index_col=0, parse_dates=True)
 
     # 將資料轉換成talib可以使用的格式
     pd_data2 = pd_data.rename(
@@ -133,9 +133,9 @@ def data_backtesting_with_CSI(stock_symbol, strategy,strategy_name,  plot, start
     if plot:
         if os.path.isfile('../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol)):
             os.remove('../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol))
-        # bt.plot(filename='../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
+        bt.plot(filename='../htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
 
-        bt.plot(filename='D:/studyplace/python_stock/quantitativetrading/trading/staticfilesserver/staticfiles/htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
+        # bt.plot(filename='D:/studyplace/python_stock/quantitativetrading/trading/staticfilesserver/staticfiles/htmlplots/{}_{}_{}.html'.format(username,strategy_name,stock_symbol),open_browser=False)
     # bt.plot()
     # print((stats))
     # logger.info(stats.to_dict())
