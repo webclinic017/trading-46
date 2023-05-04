@@ -29,7 +29,7 @@ function Copyright(props: any) {
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
             <Link color="inherit" href="https://mui.com/">
-                Your Website
+                終極股市回測王
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
@@ -152,7 +152,7 @@ export default function SignInSide() {
                                 <LockOutlinedIcon />
                             </Avatar>
                             <Typography component="h1" variant="h5">
-                                Sign in
+                            終極股市回測王
                             </Typography>
                             <Box component="form" noValidate onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
                                 <TextField

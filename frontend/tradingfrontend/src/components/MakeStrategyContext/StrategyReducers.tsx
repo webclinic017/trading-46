@@ -35,11 +35,13 @@ export enum ServerTypes {
 export enum BacktestTypes {
     CREATE_BACKTEST = 'CREATE_BACKTEST',
     DELETE_BACKTEST = 'DELETE_BACKTEST',
+    UPDATE_BACKTEST_DESCRIPTION = 'UPDATE_BACKTEST_DESCRIPTION',
     UPDATE_BACKTEST_USER = 'UPDATE_BACKTEST_USER',
     DELETE_ALL = 'DELETE_ALL',
     UPDATE_BACKTEST_ALL = 'UPDATE_BACKTEST_ALL',
     UPDATE_BACKTEST_STRATEGY = 'UPDATE_BACKTEST_STRATEGY',
     UPDATE_BACKTEST_HTML = 'UPDATE_BACKTEST_HTML',
+    UPDATE_BACKTEST_RESULT = 'UPDATE_BACKTEST_RESULT',
 }
 export enum StrategyTypes {
     UPDATE = 'UPDATE_STRATEGY',
@@ -81,6 +83,7 @@ type Description = {
     strategy_name: string;
     commission: number;
     cash: number;
+    plot: boolean;
 };
 
 type SingleBacktest = {
@@ -99,6 +102,7 @@ type SingleBacktest = {
     backtest_html: string;
     backtest_created_date: string;
     backtest_updated_date: string;
+    backtest_result: string;
 };
 
 type StrategyServerTask = {
@@ -405,6 +409,34 @@ export const SingleBacktestReducer = (
                     return task;
                 }),
             ];
+        
+        case BacktestTypes.UPDATE_BACKTEST_DESCRIPTION:
+            return [
+                ...state.map((task) => {
+                    if (task.backtest_id === action.payload.backtest_id) {
+                        return {
+                            ...task,
+                            backtest_id: action.payload.backtest_id,
+                            backtest_description: action.payload.backtest_description,
+                        };
+                    }
+                    return task;
+                }),
+            ];
+        case BacktestTypes.UPDATE_BACKTEST_RESULT:
+            return [
+                ...state.map((task) => {
+                    if (task.backtest_id === action.payload.backtest_id) {
+                        return {
+                            ...task,
+                            backtest_id: action.payload.backtest_id,
+                            backtest_result: action.payload.backtest_result,
+                        };
+                    }
+                    return task;
+                }),
+            ];
+            
         default:
             return state;
     }

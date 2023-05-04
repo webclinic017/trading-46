@@ -286,7 +286,8 @@ export default function BuyConditionAddList(props: any) {
               }}
               value={buySellAmount}
               id="outlined-basic"
-              label="要售出的%數"
+              label="要購買的%數"
+              placeholder='請輸入 0.01 ~ 1之間的數值對應為 1-100%'
               variant="outlined"
             />
                       <Button variant="contained" onClick={handleCompareMode}>

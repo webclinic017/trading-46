@@ -16,7 +16,7 @@ export const BOARD_SECTIONS = {
 
 
 // For production
-export const BACKTEST_API_NODE = 'http://backtestking.ddns.net:8050';
+export const BACKTEST_API_NODE = 'http://backtestking.ddns.net:8050/api';
 export const BACKTEST_API_VERSION = 'v1';
 export const BACKTEST_API_URL = BACKTEST_API_NODE + '/' + BACKTEST_API_VERSION;
 export const AUTH_API_NODE = BACKTEST_API_URL + '/auth/';

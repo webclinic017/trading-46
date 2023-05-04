@@ -88,7 +88,7 @@ export default function SignUp() {
             }
         )
         const response = await axios
-            .post(AUTH_API_NODE + "/sign-up", data)
+            .post(AUTH_API_NODE + "sign-up", data)
             .catch((err) => {
                 if (err.response.data.error_code === "1010004") {
                     setcolorCode(false);
@@ -135,7 +135,7 @@ export default function SignUp() {
             setSnackbarSeverity("success");
             setAlertText("帳號註冊完成，3秒內將自動返回登入頁面。");
             setTimeout(() => {
-                history.push("/");
+                history("/");
             }, 3000);
         }
     };
@@ -183,7 +183,7 @@ return (
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign up
+                終極股市回測王 註冊頁面
                 </Typography>
                 <Box component="form" noValidate onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
                     <Grid container spacing={2}>

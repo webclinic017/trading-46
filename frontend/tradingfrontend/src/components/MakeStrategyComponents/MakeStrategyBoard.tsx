@@ -261,7 +261,7 @@ export default function MakeStrategyBoard() {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          Item One
+          請直接至回測頁面選擇股票
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           <BuySettings />

@@ -16,7 +16,9 @@
 
 def BacktestParams(input):
     try:
-        int(input)
+        # output = int(input)
+        # rounded_output = round(output/100,2)
+        # return rounded_output
         return int(input)
     except ValueError:
         pass

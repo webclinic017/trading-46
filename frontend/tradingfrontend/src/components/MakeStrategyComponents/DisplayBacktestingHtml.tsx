@@ -31,9 +31,11 @@ export default function DisplayBacktestingHtml() {
 
     return (
         <Box >
-        {/* {state?.SingleBacktest[0]?.backtest_html} */}
+            {/* {state?.SingleBacktest[0]?.backtest_html} */}
             {/* <iframe title="cool" src="http://localhost:4041/htmlplots/test01@example.com_strategy_name_2033.html" width="100%" height="700px"></iframe> */}
-            <iframe title="cool" src={state?.SingleBacktest[0]?.backtest_html} width="100%" height="700px"></iframe>
+            {state?.SingleBacktest[0]?.backtest_html === 'Backtest' ? <>
+            <Box>請先進行回測，此處才會顯示圖表</Box>
+            </> : <iframe title="cool" src={state?.SingleBacktest[0]?.backtest_html} width="100%" height="700px"></iframe>}
         </Box>
     )
 }
